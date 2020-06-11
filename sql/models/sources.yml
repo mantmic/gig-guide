@@ -1,0 +1,7 @@
+version: 2
+
+sources:
+  - name: datamelbourne
+    schema: melbourne_gig_guide_landing
+    tables:
+      - name: datamelbourne_music_venue

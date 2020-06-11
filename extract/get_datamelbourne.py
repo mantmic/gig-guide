@@ -1,7 +1,6 @@
 import requests
 from google.cloud import bigquery
 import config
-
 bigquery_client = bigquery.Client()
 dataset = bigquery_client.dataset(config.bigquery_dataset_id)
 

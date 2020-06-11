@@ -1,2 +1,7 @@
 requests
 google-cloud-bigquery
+bs4
+fuzzywuzzy
+python-dateutil
+importlib
+geopy
