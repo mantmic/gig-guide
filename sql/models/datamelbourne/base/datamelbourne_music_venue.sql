@@ -15,3 +15,5 @@ select
   , lon
 from
   dup_data
+where
+  dup_rn = 1
