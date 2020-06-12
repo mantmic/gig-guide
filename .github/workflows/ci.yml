@@ -6,7 +6,7 @@ on:
       - master
 
 env:
-  GOOGLE_APPLICATION_CREDENTIALS: "/google-account.json"
+  GOOGLE_APPLICATION_CREDENTIALS: "/tmp/google-account.json"
 
 jobs:
   build:
