@@ -1,0 +1,21 @@
+melbourne_gig_guide_dbt:
+  outputs:
+    test:
+      type: bigquery
+      method: oauth
+      project: melbourne-gig-guide
+      dataset: test
+      threads: 4
+      timeout_seconds: 300
+      priority: interactive
+      retries: 1
+    prod:
+      type: bigquery
+      method: oauth
+      project: melbourne-gig-guide
+      dataset: prod
+      threads: 4
+      timeout_seconds: 300
+      priority: interactive
+      retries: 1
+  target: test
