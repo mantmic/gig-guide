@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Install python modules
+      run: |
+        cd extract
+        pip3 install -r requirements.txt
+    - name: Install dbt
+      run: |
+        pip3 install dbt
+    - name: Run extract scripts
+      run: |
+        cd extract
+        python3 get_datamelbourne.py
+    - name: Run DBT
+      run: |
+        cd sql
+        dbt run --target prod
