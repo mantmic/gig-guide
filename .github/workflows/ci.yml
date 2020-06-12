@@ -10,6 +10,8 @@ on:
 
 env:
   GOOGLE_APPLICATION_CREDENTIALS: "/tmp/google-account.json"
+  GCP_PROJECT_ID: "melbourne-gig-guide"
+  GCP_LOCATION: "australia-southeast1"
 
 jobs:
   elt:
@@ -29,34 +31,49 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     - name: Install python modules
+      working-directory: python
       run: |
         python3 -m pip install --upgrade pip
-        cd extract
         python3 -m pip install -r requirements.txt
     - name: Install dbt
       run: |
         python3 -m pip install dbt
     - name: Run extract scripts
+      working-directory: python
       run: |
-        cd extract
-        python3 get_datamelbourne.py
+        python3 extract/get_datamelbourne.py
     - name: dbt test run
+      working-directory: sql
       run: |
-        cd sql
         dbt seed --target test --profiles-dir ./
         dbt run --target test --profiles-dir ./
     - name: dbt test
+      working-directory: sql
       run: |
-        cd sql
         dbt test --target test --profiles-dir ./
-    - name: dbt prod run
+    - name: table export test
+      working-directory: python
       run: |
-        cd sql
+        python3 export/export_data.py
+      env:
+        BIGQUERY_DATASET_ID: "test"
+        GCP_BUCKET_NAME: "melbourne-gig-guide-public-test"
+    - name: dbt prod run
+      working-directory: sql
+      run: |
         dbt seed --target prod --profiles-dir ./
         dbt run --target prod --profiles-dir ./
       if: github.ref == 'refs/heads/master'
     - name: dbt prod test
+      working-directory: sql
       run: |
-        cd sql
         dbt test --target prod --profiles-dir ./
+      if: github.ref == 'refs/heads/master'
+    - name: table export prod
+      working-directory: python
+      run: |
+        python3 export/export_data.py
+      env:
+        BIGQUERY_DATASET_ID: "prod"
+        GCP_BUCKET_NAME: "melbourne-gig-guide-public"
       if: github.ref == 'refs/heads/master'
