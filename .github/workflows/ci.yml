@@ -25,6 +25,10 @@ jobs:
     - name: Install dbt
       run: |
         python3 -m pip install dbt
+    - name: Setup GCP credentials
+      run: |
+        echo $GCP_SERVICE_ACCOUNT_JSON > ~/google-account.json
+        export GOOGLE_APPLICATION_CREDENTIALS = "~/google-account.json"
     - name: Run extract scripts
       run: |
         cd extract
