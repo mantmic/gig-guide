@@ -4,12 +4,15 @@ on:
   push:
     branches:
       - master
+  pull_request:
+    branches:
+      - master
 
 env:
   GOOGLE_APPLICATION_CREDENTIALS: "/tmp/google-account.json"
 
 jobs:
-  build:
+  elt:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -37,7 +40,23 @@ jobs:
       run: |
         cd extract
         python3 get_datamelbourne.py
-    - name: Run DBT
+    - name: dbt test run
       run: |
         cd sql
-        dbt run --target prod
+        dbt seed --target test --profiles-dir ./
+        dbt run --target test --profiles-dir ./
+    - name: dbt test
+      run: |
+        cd sql
+        dbt test --target test --profiles-dir ./
+    - name: dbt prod run
+      run: |
+        cd sql
+        dbt seed --target prod --profiles-dir ./
+        dbt run --target prod --profiles-dir ./
+      if: github.ref == 'refs/heads/master'
+    - name: dbt prod test
+      run: |
+        cd sql
+        dbt test --target prod --profiles-dir ./
+      if: github.ref == 'refs/heads/master'
