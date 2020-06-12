@@ -13,6 +13,10 @@ jobs:
         python-version: [3.8]
     steps:
     - uses: actions/checkout@v1
+    - name: Setup GCP credentials
+      run: |
+        echo "$GCP_SERVICE_ACCOUNT_JSON" > ~/google-account.json
+        export GOOGLE_APPLICATION_CREDENTIALS = "~/google-account.json"
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
@@ -25,10 +29,6 @@ jobs:
     - name: Install dbt
       run: |
         python3 -m pip install dbt
-    - name: Setup GCP credentials
-      run: |
-        echo $GCP_SERVICE_ACCOUNT_JSON > ~/google-account.json
-        export GOOGLE_APPLICATION_CREDENTIALS = "~/google-account.json"
     - name: Run extract scripts
       run: |
         cd extract
