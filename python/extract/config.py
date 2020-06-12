@@ -1,1 +1,2 @@
-bigquery_dataset_id = "landing"
+import os
+bigquery_dataset_id = os.getenv('BIGQUERY_DATASET_ID', "landing_dev")

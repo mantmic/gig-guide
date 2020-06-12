@@ -41,7 +41,10 @@ jobs:
     - name: Run extract scripts
       working-directory: python
       run: |
-        python3 extract/get_datamelbourne.py
+        python3 extract/extract_data.py
+      env:
+        BIGQUERY_DATASET_ID: "landing"
+      if: github.ref == 'refs/heads/master'
     - name: dbt test run
       working-directory: sql
       run: |
