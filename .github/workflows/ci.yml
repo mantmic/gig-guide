@@ -15,7 +15,7 @@ jobs:
     - uses: actions/checkout@v1
     - name: Install python modules
       run: |
-        python -m pip3 install --upgrade pip
+        pip3 install --upgrade pip
         cd extract
         pip3 install -r requirements.txt
     - name: Install dbt
