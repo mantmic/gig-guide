@@ -34,3 +34,5 @@ clean-targets:         # directories to be removed by `dbt clean`
 models:
   datamelbourne:
     materialized: view
+  dw:
+    materialized: table
