@@ -1,10 +1,12 @@
 version: 2
 
 models:
-  - name: dim_venue
+  - name: venue
     description: Describes every live music venue in the system
     columns:
       - name: venue_id
         tests:
           - unique
           - not_null
+
+tags: "api"
