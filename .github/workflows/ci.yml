@@ -15,16 +15,16 @@ jobs:
     - uses: actions/checkout@v1
     - name: Install python modules
       run: |
-        pip3 install --upgrade pip
+        python -m pip install --upgrade pip
         cd extract
-        pip3 install -r requirements.txt
+        python -m pip install -r requirements.txt
     - name: Install dbt
       run: |
-        pip3 install dbt
+        python -m pip install dbt
     - name: Run extract scripts
       run: |
         cd extract
-        python3 get_datamelbourne.py
+        python get_datamelbourne.py
     - name: Run DBT
       run: |
         cd sql
