@@ -45,7 +45,7 @@ jobs:
       env:
         BIGQUERY_DATASET_ID: "landing_test"
         GIG_EXTRACT_DAYS: 1
-      if: github.event == 'pull_request'
+      if: github.event_name == 'pull_request'
     - name: dbt test run
       working-directory: sql
       run: |
