@@ -1,0 +1,19 @@
+version: 2
+
+models:
+  - name: thebrag_gig_final
+    description: Data on gigs from thebrag
+    columns:
+      - name: thebrag_gig_id
+        tests:
+          - unique
+          - not_null
+  - name: thebrag_gig_artist
+    description: Table containing the artists playing at each gig
+    columns:
+      - name: thebrag_gig_id
+        tests:
+          - not_null
+      - name: thebrag_gig_id
+        tests:
+          - not_null

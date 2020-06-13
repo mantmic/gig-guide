@@ -2,7 +2,7 @@ version: 2
 
 sources:
   - name: thebrag
-    schema: landing
+    schema: landing_dev
     tables:
       - name: thebrag_gigs
       - name: thebrag_gig_details
