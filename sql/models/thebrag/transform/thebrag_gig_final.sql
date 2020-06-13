@@ -1,4 +1,5 @@
 {{ config(materialized='table') }}
+
 select
     gigs.thebrag_gig_id
   , gigs.thebrag_gig_url

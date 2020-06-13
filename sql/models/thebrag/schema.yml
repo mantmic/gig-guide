@@ -2,7 +2,43 @@ version: 2
 
 sources:
   - name: thebrag
-    schema: landing_dev
+    schema: "{{ env_var('LANDING_DATASET_ID', 'landing_dev') }}"
     tables:
       - name: thebrag_gigs
       - name: thebrag_gig_details
+
+models:
+  - name: thebrag_gig_final
+    description: Data on gigs from thebrag
+    columns:
+      - name: thebrag_gig_id
+        tests:
+          - unique
+          - not_null
+      - name: thebrag_venue_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('thebrag_venue')
+              field: thebrag_venue_id
+  - name: thebrag_gig_artist
+    description: Table containing the artists playing at each gig
+    columns:
+      - name: thebrag_gig_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('thebrag_gig_final')
+              field: thebrag_gig_id
+      - name: gig_artist
+        tests:
+          - not_null
+  - name: thebrag_venue
+    description: Data on venues from thebrag
+    columns:
+      - name: thebrag_venue_id
+        tests:
+          - unique
+          - not_null
+
+tags: "thebrag"
