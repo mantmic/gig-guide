@@ -2,6 +2,17 @@ version: 2
 
 sources:
   - name: datamelbourne
-    schema: landing
+    schema: "{{ env_var('LANDING_DATASET_ID', 'landing_dev') }}"
     tables:
       - name: datamelbourne_music_venue
+
+models:
+  - name: datamelbourne_music_venue
+    description: Music venues extracted from datamelbourne
+    columns:
+      - name: datamelbourne_venue_id
+        tests:
+          - unique
+          - not_null
+
+tags: "datamelbourne"

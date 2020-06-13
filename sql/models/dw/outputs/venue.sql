@@ -1,7 +1,7 @@
 {{ config(materialized='table') }}
 
 select
-    venue_id
+    datamelbourne_venue_id as venue_id
   , venue_name
   , lat
   , lon
