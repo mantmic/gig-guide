@@ -51,10 +51,14 @@ jobs:
       run: |
         dbt seed --target test --profiles-dir ./
         dbt run --target test --profiles-dir ./
+      env:
+        LANDING_DATASET_ID: 'landing'
     - name: dbt test
       working-directory: sql
       run: |
         dbt test --target test --profiles-dir ./
+      env:
+        LANDING_DATASET_ID: 'landing'
     - name: table export test
       working-directory: python
       run: |
@@ -67,11 +71,15 @@ jobs:
       run: |
         dbt seed --target prod --profiles-dir ./
         dbt run --target prod --profiles-dir ./
+      env:
+        LANDING_DATASET_ID: 'landing'
       if: github.ref == 'refs/heads/master'
     - name: dbt prod test
       working-directory: sql
       run: |
         dbt test --target prod --profiles-dir ./
+      env:
+        LANDING_DATASET_ID: 'landing'
       if: github.ref == 'refs/heads/master'
     - name: table export prod
       working-directory: python
