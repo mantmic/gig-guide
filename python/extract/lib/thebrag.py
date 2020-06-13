@@ -43,7 +43,7 @@ def get_gig_details(url):
 
     # replace breaks with spaces to avoid strings being squished
     for br in soup.find_all('br'):
-        br.replace_with(br.text + " ")
+        br.replace_with(br.text + "_")
 
     # get location address
     gig_location_address = soup.find('th',text='Where').findNext('td').text
@@ -58,6 +58,6 @@ def get_gig_details(url):
         "gig_url":url,
         "gig_location_address":gig_location_address,
         "gig_ticket_url":gig_ticket_url,
-        "gig_artist":gig_ticket_url,
+        "gig_artist":gig_artist,
         'extract_ts':extract_ts
     })
