@@ -1,0 +1,27 @@
+version: 2
+
+sources:
+  - name: geocode
+    schema: "{{ env_var('LANDING_DATASET_ID', 'landing_dev') }}"
+    tables:
+      - name: geocode_results
+
+models:
+  - name: geocode_results
+    description: Clean geocoded addresses
+    columns:
+      - name: geocode_results_sk
+        tests:
+          - unique
+          - not_null
+      - name: geocode_input_address
+        tests:
+          - not_null
+      - name: address_clean
+        tests:
+          - not_null
+      - name: location_geog
+        tests:
+          - not_null
+
+tags: "geocode"

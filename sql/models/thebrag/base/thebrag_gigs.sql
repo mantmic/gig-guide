@@ -7,6 +7,7 @@ with dup_data as
   , gig_url                   as thebrag_gig_url
   , cast ( gig_date as date ) as gig_date
   , gig_city
+  , gig_location              as thebrag_venue_name
   , row_number() over ( partition by gig_url order by extract_ts desc ) as dup_rn
 from
   {{ source('thebrag', 'thebrag_gigs') }}
@@ -14,6 +15,7 @@ from
 select
     thebrag_gig_id
   , thebrag_venue_id
+  , thebrag_venue_name
   , thebrag_gig_url
   , gig_date
   , gig_city
