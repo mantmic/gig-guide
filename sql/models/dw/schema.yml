@@ -1,12 +1,25 @@
 version: 2
 
 models:
-  - name: venue
+  - name: stg_venue_spine
+    description: A table containing system venue ids and how they link to other venue source tables
+    columns:
+      - name: venue_id
+        tests:
+          - unique
+          - not_null
+  - name: dim_venue
     description: Describes every live music venue in the system
     columns:
       - name: venue_id
         tests:
           - unique
           - not_null
+    tests:
+      - unique_location:
+          lat: lat
+          lon: lon
+          distance_threshold: 5
+          severity: warn
 
 tags: "api"

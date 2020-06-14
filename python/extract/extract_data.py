@@ -1,9 +1,12 @@
 from prefect import Parameter, Flow
-
-import get_datamelbourne as get_datamelbourne
-import get_thebrag as get_thebrag
 from prefect import task
-import lib.bigquery as bigquery
+import lib.bigquery         as bigquery
+import config               as config
+
+# import extract scripts
+import get_datamelbourne    as get_datamelbourne
+import get_thebrag          as get_thebrag
+import get_geocode          as get_geocode
 
 # common task to load json data into bigquery
 @task
@@ -20,10 +23,14 @@ with Flow("ELT") as flow:
     # extract get gig_details
     thebrag_gig_details = get_thebrag.extract_gig_details(thebrag_gigs)
     load_json_data(thebrag_gig_details,'thebrag_gig_details')
+    # geocode gig detail addresses
+    thebrag_geocoded_addresses = get_geocode.extract_geocode(thebrag_gig_details,'gig_location_address')
+    load_json_data(thebrag_geocoded_addresses,config.geocode_result_table)
 
     # datamelbourne tasks
-    datamelbourne_music_venue = get_datamelbourne.extract_music_venue()
-    load_json_data(datamelbourne_music_venue,'datamelbourne_music_venue')
+    #datamelbourne_music_venue = get_datamelbourne.extract_music_venue()
+    #load_json_data(datamelbourne_music_venue,'datamelbourne_music_venue')
+    # geocode melbourne music
 
 
 state = flow.run()

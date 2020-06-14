@@ -1,3 +1,5 @@
 google-cloud-bigquery
 prefect
 beautifulsoup4
+geocoder
+pandas

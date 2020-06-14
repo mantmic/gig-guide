@@ -36,8 +36,10 @@ jobs:
         python3 -m pip install --upgrade pip
         python3 -m pip install -r requirements.txt
     - name: Install dbt
+      working-directory: sql
       run: |
         python3 -m pip install dbt
+        dbt deps
     - name: Run extract scripts test
       working-directory: python
       run: |
