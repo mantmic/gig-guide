@@ -15,5 +15,11 @@ models:
         tests:
           - unique
           - not_null
+    tests:
+      - unique_location:
+          lat: lat
+          lon: lon
+          distance_threshold: 5
+          severity: warn
 
 tags: "api"
