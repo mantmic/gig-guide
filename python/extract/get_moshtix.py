@@ -13,6 +13,7 @@ def extract_gig_details(input_data,gig_url_field):
         # validate that url is a moshtix url, then scrape
         parsed_url = urlparse(url)
         if(parsed_url.netloc == 'www.moshtix.com.au'):
+            print("Scraping moshtix url %s" % url)
             try:
                 results.append(moshtix.get_gig_details(url))
             except:
