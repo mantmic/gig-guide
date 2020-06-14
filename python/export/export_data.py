@@ -11,11 +11,14 @@ bucket_name = os.getenv('GCP_BUCKET_NAME', "melbourne-gig-guide-public-dev")
 client = bigquery.Client()
 
 # list of tables to export
-table_export_list = ['venue']
+table_export_list = [
+    {"table_id":"venue","file_name":"melbourne/venue"}
+]
 
-for table_id in table_export_list:
-
-    destination_uri = "gs://{}/{}".format(bucket_name, ".".join([table_id,'csv']))
+for table in table_export_list:
+    table_id = table.get('table_id')
+    file_name = table.get('file_name')
+    destination_uri = "gs://{}/{}".format(bucket_name, ".".join([file_name,'csv']))
 
     print(
         "Exporting {}:{}.{} to {}".format(project, dataset_id, table_id, destination_uri)

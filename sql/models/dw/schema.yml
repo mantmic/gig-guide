@@ -8,7 +8,7 @@ models:
         tests:
           - unique
           - not_null
-  - name: venue
+  - name: dim_venue
     description: Describes every live music venue in the system
     columns:
       - name: venue_id

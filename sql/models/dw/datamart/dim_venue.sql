@@ -5,6 +5,7 @@ select
      , thebrag.thebrag_venue_name as venue_name
      , geocode_results.lat
      , geocode_results.lon
+     , thebrag.venue_city
 from
   {{ ref('stg_venue_spine') }} spine
   join
