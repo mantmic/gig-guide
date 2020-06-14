@@ -1,0 +1,25 @@
+version: 2
+
+sources:
+  - name: moshtix
+    schema: "{{ env_var('LANDING_DATASET_ID', 'landing_dev') }}"
+    tables:
+      - name: moshtix_gig_details
+
+models:
+  - name: moshtix_gig_details
+    description: gig details from moshtix
+    columns:
+      - name: moshtix_url
+        tests:
+          - unique
+          - not_null
+  - name: moshtix_gig_details_final
+    description: gig details from moshtix
+    columns:
+      - name: moshtix_url
+        tests:
+          - unique
+          - not_null
+
+tags: "moshtix"

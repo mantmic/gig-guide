@@ -3,3 +3,4 @@ prefect
 beautifulsoup4
 geocoder
 pandas
+urllib
