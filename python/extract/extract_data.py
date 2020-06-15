@@ -52,13 +52,6 @@ def main():
         thebrag_moshtix_gig_details = get_moshtix.extract_gig_details(thebrag_gig_details,'gig_ticket_url')
         load_json_data(thebrag_moshtix_gig_details,'moshtix_gig_details')
 
-        # datamelbourne tasks
-        #datamelbourne_music_venue = get_datamelbourne.extract_music_venue()
-        #load_json_data(datamelbourne_music_venue,'datamelbourne_music_venue')
-        # geocode melbourne music
-
-        #
-
     state = flow.run()
     #flow.run(executor=DaskExecutor())
 

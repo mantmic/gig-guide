@@ -1,5 +1,5 @@
 import datetime
-from bs4 import BeautifulSoup
+import lib.scrape as scrape
 import requests
 from urllib.parse import urlparse
 
@@ -15,12 +15,13 @@ def get_gig_details(url):
     Return:
         object: Gig details
     '''
-    print("extracting url %s" % url)
 
     parsed_url = urlparse(url)
 
-    res = requests.get(url)
-    soup = BeautifulSoup(res.text,'html.parser')
+    soup = scrape.get_soup(url)
+
+    if(soup == None):
+        return({})
 
     gig_datetime = soup.find('div',id='event-summary-date').text
 

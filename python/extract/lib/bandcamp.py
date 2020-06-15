@@ -1,8 +1,9 @@
 import requests
 from urllib import request, parse
-from bs4 import BeautifulSoup, Comment
+from bs4 import Comment
 import re
 import datetime
+import lib.scrape as scrape
 
 
 def get_bandcamp_search(artist_name):
@@ -14,8 +15,10 @@ def get_bandcamp_search(artist_name):
 
     search_url = "".join(["https://bandcamp.com/search?q=",parse.quote(artist_name)])
 
-    res = requests.get(search_url)
-    soup = BeautifulSoup(res.text,'html.parser')
+    soup = scrape.get_soup(search_url)
+
+    if(soup == None):
+        return(results)
 
     band_search_results = soup.findAll('li', class_='searchresult band')
 
@@ -40,8 +43,10 @@ def get_bandcamp_albums(url):
 
     parsed_url = parse.urlparse(url)
 
-    res = requests.get(url)
-    soup = BeautifulSoup(res.text,'html.parser')
+    soup = scrape.get_soup(url)
+
+    if(soup == None):
+        return(results)
 
     # initialise album order
     album_order = 1
@@ -49,7 +54,7 @@ def get_bandcamp_albums(url):
     # find the album links
     album_link_objects = soup.findAll('li', class_="music-grid-item square first-four")
 
-    # TODO handle label pages that have links to artists 
+    # TODO handle label pages that have links to artists
     if(len(album_link_objects) > 0):
         for album_link in album_link_objects:
             # determine whether album_url is relative path or absolute
@@ -89,8 +94,10 @@ def get_bandcamp_album_details(url):
 
     parsed_url = parse.urlparse(url)
 
-    res = requests.get(url)
-    soup = BeautifulSoup(res.text,'html.parser')
+    soup = scrape.get_soup(url)
+
+    if(soup == None):
+        return(results)
 
     # get album / track id
     page_comments = soup.findAll(text=lambda text:isinstance(text, Comment))
