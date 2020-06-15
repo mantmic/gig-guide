@@ -51,8 +51,8 @@ jobs:
     - name: dbt test run
       working-directory: sql
       run: |
-        dbt seed --target test --profiles-dir ./
-        dbt run --target test --profiles-dir ./
+        dbt seed --target test --profiles-dir ./ --full-refresh
+        dbt run --target test --profiles-dir ./ --full-refresh
       env:
         LANDING_DATASET_ID: 'landing_test'
     - name: dbt test
@@ -79,8 +79,8 @@ jobs:
     - name: dbt prod run
       working-directory: sql
       run: |
-        dbt seed --target prod --profiles-dir ./
-        dbt run --target prod --profiles-dir ./
+        dbt seed --target prod --profiles-dir ./ --full-refresh
+        dbt run --target prod --profiles-dir ./ --full-refresh
       env:
         LANDING_DATASET_ID: 'landing'
       if: github.ref == 'refs/heads/master'

@@ -1,19 +1,21 @@
-{{ config(materialized='table') }}
+{{ config(materialized='view') }}
 
 with artist_clean as
 ( select distinct
       gig_details.thebrag_gig_id
-    , trim ( gig_artist )         as gig_artist
+    , trim ( thebrag_artist_name )   as thebrag_artist_name
 from
   {{ ref('thebrag_gig_details') }} gig_details
   cross join
-  unnest ( gig_details.thebrag_gig_artist_array ) as gig_artist
+  unnest ( gig_details.thebrag_gig_artist_array ) as thebrag_artist_name
 where
-  gig_artist is not null
+  thebrag_artist_name is not null
 )
 select
-  *
+    thebrag_gig_id
+  , thebrag_artist_name
+  , {{ dbt_utils.surrogate_key('thebrag_artist_name') }} as thebrag_artist_id
 from
   artist_clean
 where
-  gig_artist not in ( '' )
+  thebrag_artist_name not in ( '' )

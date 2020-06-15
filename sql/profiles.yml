@@ -5,7 +5,7 @@ melbourne_gig_guide_dbt:
       method: oauth
       project: melbourne-gig-guide
       dataset: test
-      threads: 4
+      threads: 16
       timeout_seconds: 300
       priority: interactive
       retries: 1
@@ -14,7 +14,7 @@ melbourne_gig_guide_dbt:
       method: oauth
       project: melbourne-gig-guide
       dataset: prod
-      threads: 4
+      threads: 16
       timeout_seconds: 300
       priority: interactive
       retries: 1

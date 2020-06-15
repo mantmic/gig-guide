@@ -1,5 +1,5 @@
 import datetime
-from bs4 import BeautifulSoup
+import lib.scrape as scrape
 import requests
 
 def get_gigs(date = datetime.datetime.now(),city = 'melbourne'):
@@ -7,18 +7,20 @@ def get_gigs(date = datetime.datetime.now(),city = 'melbourne'):
     extract_ts = datetime.datetime.now().isoformat()
     #format url
     url = "https://thebrag.com/gigs/?title=&artist=&gig_date={}+{}+{}&city={}&search=Search".format(date.day,date.strftime('%b'),date.year,city)
-    print("extracting url %s" % url)
-    res = requests.get(url)
-    soup = BeautifulSoup(res.text,'html.parser')
+    results = []
+    soup = scrape.get_soup(url)
+
+    if(soup == None):
+        return(results)
 
     # get each gig
     gigs = soup.findAll("div",class_="gig-title")
-    results = []
 
     for gig in gigs:
         gig_name = gig.text
         gig_url = gig.findChild('a').get('href')
         gig_artist = gig.findNext('div',class_='gig-artist').text
+        gig_artist_list = gig_artist.split(',')
         gig_location = gig.findNext('div',class_='gig-location').text
         gig_location_url = gig.findNext('div',class_='gig-location').findChild('a').get('href')
         # append record
@@ -28,6 +30,7 @@ def get_gigs(date = datetime.datetime.now(),city = 'melbourne'):
             'gig_name':gig_name,
             'gig_url':gig_url,
             'gig_artist':gig_artist,
+            'gig_artist_list':gig_artist_list,
             'gig_location':gig_location,
             'gig_location_url':gig_location_url,
             'extract_ts':extract_ts
@@ -38,9 +41,10 @@ def get_gigs(date = datetime.datetime.now(),city = 'melbourne'):
 # get details for a gig url
 def get_gig_details(url):
     extract_ts = datetime.datetime.now().isoformat()
-    res = requests.get(url)
-    soup = BeautifulSoup(res.text,'html.parser')
+    soup = scrape.get_soup(url)
 
+    if(soup == None):
+        return({})
     # replace breaks with spaces to avoid strings being squished
     for br in soup.find_all('br'):
         br.replace_with(br.text + "_")
