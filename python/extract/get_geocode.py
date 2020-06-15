@@ -45,11 +45,11 @@ def get_geocode(addresses = []):
     # get already geocoded adddresses
     geocoded_addresses = get_geocoded_addresses()
     for address in addresses:
-        print("Geocoding address %s" % address)
         # if address already exists, skip
         if(geocoded_addresses.get(address)):
-            print("Address already geocoded")
+            pass
         else:
+            print("Geocoding address %s" % address)
             try:
                 g = geocode.get_geocode(address)
                 results.append(g)
