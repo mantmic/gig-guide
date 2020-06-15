@@ -16,7 +16,7 @@ def get_soup(url):
     except:
         if (retry_count < retry_max_count):
             retry_count += 1
-            print("{} of {} failed to extract url".format(url,retry_count,retry_max_count))
+            print("{} of {} failed to extract url".format(retry_count,retry_max_count))
             print("Sleeping %s seconds" % retry_sleep_time)
             time.sleep(retry_sleep_time)
         else:

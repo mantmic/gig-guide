@@ -90,14 +90,13 @@ def get_bandcamp_album_details(url):
         url (str): A url to the artists album/track on bandcamp
     '''
     extract_ts = datetime.datetime.now().isoformat()
-    results = []
 
     parsed_url = parse.urlparse(url)
 
     soup = scrape.get_soup(url)
 
     if(soup == None):
-        return(results)
+        return({})
 
     # get album / track id
     page_comments = soup.findAll(text=lambda text:isinstance(text, Comment))
