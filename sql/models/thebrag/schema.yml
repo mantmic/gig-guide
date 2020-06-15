@@ -30,8 +30,15 @@ models:
           - relationships:
               to: ref('thebrag_gig_final')
               field: thebrag_gig_id
-      - name: gig_artist
+      - name: thebrag_artist_name
         tests:
+          - not_null
+  - name: thebrag_artist
+    description: Table containing all artists from thebrag
+    columns:
+      - name: thebrag_artist_id
+        tests:
+          - unique
           - not_null
   - name: thebrag_venue
     description: Data on venues from thebrag

@@ -8,6 +8,11 @@ models:
         tests:
           - unique
           - not_null
+      - name: thebrag_venue_id
+        tests:
+          - relationships:
+              to: ref('thebrag_venue')
+              field: thebrag_venue_id
   - name: stg_artist_spine
     description: A table containing system artist ids and how they link to other venue source tables
     columns:
@@ -32,9 +37,6 @@ models:
         tests:
           - unique
           - not_null
-          - relationships:
-              to: ref('thebrag_venue')
-              field: thebrag_venue_id
     tests:
       - unique_location:
           lat: lat
