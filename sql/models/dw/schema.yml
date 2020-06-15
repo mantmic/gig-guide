@@ -8,6 +8,23 @@ models:
         tests:
           - unique
           - not_null
+  - name: stg_artist_spine
+    description: A table containing system artist ids and how they link to other venue source tables
+    columns:
+      - name: artist_id
+        tests:
+          - unique
+          - not_null
+      - name: bandcamp_artist_id
+        tests:
+          - relationships:
+              to: ref('bandcamp_artist')
+              field: bandcamp_artist_id
+      - name: thebrag_artist_id
+        tests:
+          - relationships:
+              to: ref('thebrag_artist')
+              field: thebrag_artist_id
   - name: dim_venue
     description: Describes every live music venue in the system
     columns:
@@ -15,6 +32,9 @@ models:
         tests:
           - unique
           - not_null
+          - relationships:
+              to: ref('thebrag_venue')
+              field: thebrag_venue_id
     tests:
       - unique_location:
           lat: lat

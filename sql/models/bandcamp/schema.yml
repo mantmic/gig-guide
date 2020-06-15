@@ -1,0 +1,27 @@
+version: 2
+
+sources:
+  - name: bandcamp
+    schema: "{{ env_var('LANDING_DATASET_ID', 'landing_dev') }}"
+    tables:
+      - name: bandcamp_album_details
+      - name: bandcamp_artist_albums
+      - name: bandcamp_artist_search
+
+models:
+  - name: bandcamp_artist_search
+    description: Bandcamp artist name search results
+    columns:
+      - name: bandcamp_artist_search_sk
+        tests:
+          - unique
+          - not_null
+  - name: bandcamp_artist
+    description: Artists from bandcamp
+    columns:
+      - name: bandcamp_artist_id
+        tests:
+          - unique
+          - not_null
+
+tags: "bandcamp"
