@@ -24,7 +24,7 @@ jobs:
     - name: Setup GCP credentials
       run: |
         sudo echo "$GCP_SERVICE_ACCOUNT_JSON" > $GOOGLE_APPLICATION_CREDENTIALS
-      env: # Or as an environment variable
+      env: # Or as an environment variablez
         GCP_SERVICE_ACCOUNT_JSON: ${{ secrets.GCP_SERVICE_ACCOUNT_JSON }}
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
@@ -74,7 +74,7 @@ jobs:
         python3 extract/extract_data.py
       env:
         BIGQUERY_DATASET_ID: "landing"
-        GIG_EXTRACT_DAYS: 14
+        GIG_EXTRACT_DAYS: 3
       if: github.ref == 'refs/heads/master'
     - name: dbt prod run
       working-directory: sql

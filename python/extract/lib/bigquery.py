@@ -6,6 +6,7 @@ import json
 bigquery_client = bigquery.Client()
 dataset = bigquery_client.dataset(config.bigquery_dataset_id)
 
+
 def get_query(query_string):
     '''
     Function to query bigquery and result result as list of objects
@@ -18,6 +19,7 @@ def get_query(query_string):
     query_job = bigquery_client.query(query_string)
     df = query_job.to_dataframe()
     return(json.loads(df.to_json(orient='records')))
+
 
 
 def load_json_data(data,table):
