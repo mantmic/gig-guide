@@ -2,7 +2,7 @@
 
 -- thebrag artists
 select
-    row_number() over ( order by thebrag.thebrag_artist_name )                as artist_id
+    to_hex ( {{ dbt_utils.surrogate_key('bandcamp.bandcamp_artist_name', 'thebrag.thebrag_artist_name') }} )  as artist_id
   , coalesce ( bandcamp.bandcamp_artist_name, thebrag.thebrag_artist_name )   as artist_name
   , thebrag.thebrag_artist_id
   , bandcamp.bandcamp_artist_id

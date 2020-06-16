@@ -2,7 +2,7 @@
 
 with dup_data as
 ( select
-    {{ dbt_utils.surrogate_key('results.geocode_provider', 'results.input_address') }}  as geocode_results_sk
+    to_hex ( {{ dbt_utils.surrogate_key('results.geocode_provider', 'results.input_address') }} )  as geocode_results_sk
   , results.input_address                                                               as geocode_input_address
   , results.geocode_provider
   , geojson_features.properties.lat                                                     as lat
