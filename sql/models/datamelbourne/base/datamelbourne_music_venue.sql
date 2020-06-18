@@ -1,3 +1,5 @@
+{{ config(enabled=False) }}
+
 with dup_data as
 ( select
     property_number as datamelbourne_venue_id

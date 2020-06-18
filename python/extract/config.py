@@ -1,3 +1,3 @@
 import os
 bigquery_dataset_id = os.getenv('BIGQUERY_DATASET_ID', "landing_dev")
-geocode_result_table = 'geocode_results'
+gcp_bucket_landing = os.getenv('GCP_BUCKET_LANDING', "melbourne-gig-guide-landing-dev")

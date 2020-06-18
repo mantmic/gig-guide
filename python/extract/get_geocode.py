@@ -1,9 +1,11 @@
 import lib.geocode  as geocode
-import lib.bigquery as bigquery
+import lib.gcp      as bigquery
 import config       as config
 
 import datetime
 from prefect import task
+
+geocode_result_table = 'geocode_results'
 
 def get_geocoded_addresses(geocode_provider = 'arcgis', expiry_period_days = 90):
     '''
@@ -18,7 +20,7 @@ def get_geocoded_addresses(geocode_provider = 'arcgis', expiry_period_days = 90)
         dict: Dictionary of all extracted addresses
 
     '''
-    if(bigquery.check_table_exists(config.geocode_result_table)):
+    if(bigquery.check_table_exists(geocode_result_table)):
         results = {}
         # Get extracted results
         min_extract_ts = datetime.datetime.now() - datetime.timedelta(days=expiry_period_days)
@@ -30,7 +32,7 @@ def get_geocoded_addresses(geocode_provider = 'arcgis', expiry_period_days = 90)
         where
             geocode_provider = '{}'
             and extract_ts > '{}'
-        """.format(config.bigquery_dataset_id,config.geocode_result_table,geocode_provider,min_extract_ts.isoformat())
+        """.format(config.bigquery_dataset_id,geocode_result_table,geocode_provider,min_extract_ts.isoformat())
         geocoded_addresses = bigquery.get_query(sql_query)
         # orient into dictionary
         for a in geocoded_addresses:

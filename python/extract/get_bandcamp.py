@@ -1,5 +1,5 @@
 import lib.bandcamp as bandcamp
-import lib.bigquery as bigquery
+import lib.gcp      as bigquery
 
 import config
 
