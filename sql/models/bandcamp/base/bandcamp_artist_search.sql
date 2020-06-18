@@ -1,8 +1,8 @@
-{{ config(materialized='table') }}
+{{ config(materialized='view') }}
 
 with dup_data as
 ( select
-    {{ dbt_utils.surrogate_key('input_artist_name', 'search_rank') }}       as bandcamp_artist_search_sk
+    to_hex ( {{ dbt_utils.surrogate_key('input_artist_name', 'search_rank') }} )  as bandcamp_artist_search_sk
   , input_artist_name                                                       as bandcamp_input_artist_name
   , trim ( bandcamp_artist_name )                                           as bandcamp_artist_name
   , bandcamp_url

@@ -30,6 +30,30 @@ models:
           - relationships:
               to: ref('thebrag_artist')
               field: thebrag_artist_id
+  - name: stg_gig_spine
+    description: A table containing system gig ids and how they link to other venue source tables
+    columns:
+      - name: gig_id
+        tests:
+          - unique
+          - not_null
+      - name: thebrag_gig_id
+        tests:
+          - relationships:
+              to: ref('thebrag_gig_final')
+              field: thebrag_gig_id
+  - name: dim_gig
+    description: A table containing system gigs
+    columns:
+      - name: gig_id
+        tests:
+          - unique
+          - not_null
+      - name: venue_id
+        tests:
+          - relationships:
+              to: ref('dim_venue')
+              field: venue_id
   - name: dim_venue
     description: Describes every live music venue in the system
     columns:

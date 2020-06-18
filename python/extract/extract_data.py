@@ -1,9 +1,9 @@
 from prefect import Parameter, Flow
 from prefect import task
 from prefect.engine.executors import DaskExecutor
+import datetime
 
-
-import lib.bigquery         as bigquery
+import lib.gcp              as gcp
 import config               as config
 
 # import extract scripts
@@ -12,10 +12,19 @@ import get_thebrag          as get_thebrag
 import get_geocode          as get_geocode
 import get_moshtix          as get_moshtix
 import get_bandcamp         as get_bandcamp
+
+# evaluate the extract timestamp for all files
+extract_ts = datetime.datetime.now().isoformat().replace(':','').replace('.','')
 # common task to load json data into bigquery
 @task
-def load_json_data(data,table):
-    job_result = bigquery.load_json_data(data,table)
+def load_json_data(data,table,source_system):
+    # create directory path
+    directory = '/'.join([source_system,table])
+    file_prefix = '_'.join([table,extract_ts])
+    job_result = gcp.load_json_data(data,directory,file_prefix)
+    # create external table
+    table_name = '_'.join([source_system,table])
+    gcp.create_external_table(directory,table_name)
     return(job_result)
 
 
@@ -29,28 +38,28 @@ def main():
         """
         # extract gigs
         thebrag_gigs = get_thebrag.extract_gigs()
-        load_json_data(thebrag_gigs,'thebrag_gigs')
+        load_json_data(thebrag_gigs,'gigs','thebrag')
         # search for thebrag artists on bandcamp
         thebrag_bandcamp_artist_details = get_bandcamp.extract_artist_search(thebrag_gigs,'gig_artist_list')
-        load_json_data(thebrag_bandcamp_artist_details,'bandcamp_artist_search')
+        load_json_data(thebrag_bandcamp_artist_details,'artist_search','bandcamp')
 
         # get albums for bandcamp artists
         thebrag_bandcamp_artist_albums = get_bandcamp.extract_artist_albums(thebrag_bandcamp_artist_details,'bandcamp_url')
-        load_json_data(thebrag_bandcamp_artist_albums,'bandcamp_artist_albums')
+        load_json_data(thebrag_bandcamp_artist_albums,'artist_albums','bandcamp')
 
         # get album details for those albums
         thebrag_bandcamp_artist_album_details = get_bandcamp.extract_album_details(thebrag_bandcamp_artist_albums,'bandcamp_album_url')
-        load_json_data(thebrag_bandcamp_artist_album_details,'bandcamp_album_details')
+        load_json_data(thebrag_bandcamp_artist_album_details,'album_details','bandcamp')
 
         # extract gig_details
         thebrag_gig_details = get_thebrag.extract_gig_details(thebrag_gigs)
-        load_json_data(thebrag_gig_details,'thebrag_gig_details')
+        load_json_data(thebrag_gig_details,'gig_details','thebrag')
         # geocode gig detail addresses
         thebrag_geocoded_addresses = get_geocode.extract_geocode(thebrag_gig_details,'gig_location_address')
-        load_json_data(thebrag_geocoded_addresses,config.geocode_result_table)
+        load_json_data(thebrag_geocoded_addresses,'results','geocode')
         # get additional gig details from links
         thebrag_moshtix_gig_details = get_moshtix.extract_gig_details(thebrag_gig_details,'gig_ticket_url')
-        load_json_data(thebrag_moshtix_gig_details,'moshtix_gig_details')
+        load_json_data(thebrag_moshtix_gig_details,'gig_details','moshtix')
 
     state = flow.run()
     #flow.run(executor=DaskExecutor())

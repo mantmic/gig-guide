@@ -5,6 +5,7 @@ select
   , gigs.thebrag_gig_url
   , gigs.thebrag_venue_id
   , gigs.gig_date
+  , gig_details.gig_ticket_url
 from
   {{ ref('thebrag_gigs') }} gigs
   join

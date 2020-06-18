@@ -47,6 +47,7 @@ jobs:
       env:
         BIGQUERY_DATASET_ID: "landing_test"
         GIG_EXTRACT_DAYS: 1
+        GCP_BUCKET_LANDING: "melbourne-gig-guide-landing-dev"
       if: github.event_name == 'pull_request'
     - name: dbt test run
       working-directory: sql
@@ -75,6 +76,7 @@ jobs:
       env:
         BIGQUERY_DATASET_ID: "landing"
         GIG_EXTRACT_DAYS: 3
+        GCP_BUCKET_LANDING: "melbourne-gig-guide-landing-prod"
       if: github.ref == 'refs/heads/master'
     - name: dbt prod run
       working-directory: sql
