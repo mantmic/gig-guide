@@ -1,0 +1,26 @@
+version: 2
+
+sources:
+  - name: unearthed
+    schema: "{{ env_var('LANDING_DATASET_ID', 'landing_dev') }}"
+    tables:
+      - name: unearthed_artist_search
+      - name: unearthed_artist_details
+
+models:
+  - name: unearthed_artist_search
+    description: Table containing search results from unearthed
+    columns:
+      - name: unearthed_search_artist_sk
+        tests:
+          - unique
+          - not_null
+  - name: unearthed_artist_details
+    description: Table containing artist pages from unearthed
+    columns:
+      - name: unearthed_artist_details_sk
+        tests:
+          - unique
+          - not_null
+
+tags: "unearthed"

@@ -72,7 +72,7 @@ def get_artist_details(url):
     Function to get information from an artist page on JJJ unearthed
     '''
     soup = scrape.get_soup(url)
-    artist_details = {}
+    artist_details = {'unearthed_artist_url':url}
     artist_details['artist_name'] = soup.find('h1',id='unearthed-profile-title').text
 
     # get location

@@ -50,7 +50,10 @@ def extract_artist_search(input_data,artist_name_field):
     # get unique artists
     artist_names = list(set(artist_names))
     # get already extracted artists
-    extracted_artist_names = get_extracted_artist_names()
+    if(config.extract_type == 'full'):
+        extracted_artist_names = {}
+    else:
+        extracted_artist_names = get_extracted_artist_names()
     # iterate
     for artist_name in artist_names:
         if(extracted_artist_names.get(artist_name)):
