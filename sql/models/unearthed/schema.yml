@@ -22,5 +22,19 @@ models:
         tests:
           - unique
           - not_null
+  - name: unearthed_artist
+    description: Master table of artists from unearthed
+    columns:
+      - name: unearthed_artist_id
+        tests:
+          - unique
+          - not_null
+  - name: unearthed_track
+    description: Table containing links to tracks on the unearthed website
+    columns:
+      - name: unearthed_track_id
+        tests:
+          - unique
+          - not_null
 
 tags: "unearthed"
