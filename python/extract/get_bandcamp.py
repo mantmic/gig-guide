@@ -1,20 +1,12 @@
 import lib.bandcamp as bandcamp
 import lib.gcp      as bigquery
-
+import lib.util     as util
 import config
 
 from prefect import task
-import collections
 import os
 import time
 import datetime
-
-def flatten(l):
-    for el in l:
-        if isinstance(el, collections.Iterable) and not isinstance(el, (str, bytes)):
-            yield from flatten(el)
-        else:
-            yield el
 
 def get_extracted_artist_names(expiry_period_days = 90):
     '''
@@ -55,7 +47,7 @@ def extract_artist_search(input_data,artist_name_field):
     # get urls from input data
     artist_names = [i.get(artist_name_field) for i in input_data]
     # flatten list
-    artist_names = flatten(artist_names)
+    artist_names = util.flatten(artist_names)
     # get unique artists
     artist_names = list(set(artist_names))
 
