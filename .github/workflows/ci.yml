@@ -40,45 +40,33 @@ jobs:
       run: |
         python3 -m pip install dbt
         dbt deps
-    - name: Run extract scripts test
+    - name: set test environment variables
+        uses: allenevans/set-env@v1.0.0
+        with:
+          BIGQUERY_DATASET_ID: "landing_dev"
+          LANDING_DATASET_ID: "landing_dev"
+          GIG_EXTRACT_DAYS: 1
+          GCP_BUCKET_LANDING: "melbourne-gig-guide-landing-dev"
+          OUTPUT_DATASET_ID: "dev"
+          GCP_BUCKET_NAME: "melbourne-gig-guide-public-test"
+          DBT_TARGET: "test"
+        if: github.ref != 'refs/heads/master'
+    - name: set prod environment variables
+        uses: allenevans/set-env@v1.0.0
+        with:
+          BIGQUERY_DATASET_ID: "landing"
+          LANDING_DATASET_ID: "landing"
+          GIG_EXTRACT_DAYS: 3
+          GCP_BUCKET_LANDING: "melbourne-gig-guide-landing-prod"
+          OUTPUT_DATASET_ID: "dev"
+          GCP_BUCKET_NAME: "melbourne-gig-guide-public"
+          DBT_TARGET: "prod"
+        if: github.ref == 'refs/heads/master'
+    - name: Run extract scripts
       working-directory: python
       run: |
         python3 extract/extract_data.py
-      env:
-        BIGQUERY_DATASET_ID: "landing_test"
-        GIG_EXTRACT_DAYS: 1
-        GCP_BUCKET_LANDING: "melbourne-gig-guide-landing-dev"
-      if: github.event_name == 'pull_request'
-    - name: dbt test run
-      working-directory: sql
-      run: |
-        dbt seed --target test --profiles-dir ./ --full-refresh
-        dbt run --target test --profiles-dir ./ --full-refresh
-      env:
-        LANDING_DATASET_ID: 'landing_test'
-    - name: dbt test
-      working-directory: sql
-      run: |
-        dbt test --target test --profiles-dir ./
-      env:
-        LANDING_DATASET_ID: 'landing_test'
-    - name: table export test
-      working-directory: python
-      run: |
-        python3 export/export_data.py
-      env:
-        BIGQUERY_DATASET_ID: "test"
-        GCP_BUCKET_NAME: "melbourne-gig-guide-public-test"
-    - name: Run extract scripts prod
-      working-directory: python
-      run: |
-        python3 extract/extract_data.py
-      env:
-        BIGQUERY_DATASET_ID: "landing"
-        GIG_EXTRACT_DAYS: 3
-        GCP_BUCKET_LANDING: "melbourne-gig-guide-landing-prod"
-      if: github.ref == 'refs/heads/master'
-    - name: dbt prod run
+    - name: dbt run
       working-directory: sql
       run: |
         dbt seed --target prod --profiles-dir ./ --full-refresh
@@ -86,18 +74,11 @@ jobs:
       env:
         LANDING_DATASET_ID: 'landing'
       if: github.ref == 'refs/heads/master'
-    - name: dbt prod test
+    - name: dbt test
       working-directory: sql
       run: |
         dbt test --target prod --profiles-dir ./
-      env:
-        LANDING_DATASET_ID: 'landing'
-      if: github.ref == 'refs/heads/master'
-    - name: table export prod
+    - name: table export
       working-directory: python
       run: |
         python3 export/export_data.py
-      env:
-        BIGQUERY_DATASET_ID: "prod"
-        GCP_BUCKET_NAME: "melbourne-gig-guide-public"
-      if: github.ref == 'refs/heads/master'
