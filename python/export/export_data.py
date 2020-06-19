@@ -4,7 +4,7 @@ from google.cloud import bigquery
 # get environment variables
 project = os.getenv('GCP_PROJECT_ID', "melbourne-gig-guide")
 location = os.getenv('GCP_LOCATION', "australia-southeast1")
-dataset_id = os.getenv('OUTPUT_DATASET_ID', "dev")
+dataset_id = os.getenv('BIGQUERY_DATASET_ID', "dev")
 bucket_name = os.getenv('GCP_BUCKET_NAME', "melbourne-gig-guide-public-dev")
 
 # initialize client

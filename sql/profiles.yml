@@ -1,21 +1,12 @@
 melbourne_gig_guide_dbt:
   outputs:
-    test:
+    dw:
       type: bigquery
       method: oauth
-      project: melbourne-gig-guide
-      dataset: test
+      project: "{{ env_var('GCP_PROJECT_ID') }}"
+      dataset: "{{ env_var('BIGQUERY_DATASET_ID') }}"
       threads: 16
       timeout_seconds: 300
       priority: interactive
       retries: 1
-    prod:
-      type: bigquery
-      method: oauth
-      project: melbourne-gig-guide
-      dataset: prod
-      threads: 16
-      timeout_seconds: 300
-      priority: interactive
-      retries: 1
-  target: test
+  target: dw
