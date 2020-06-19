@@ -3,11 +3,11 @@
 with dup_data as
 ( select
     to_hex ( {{ dbt_utils.surrogate_key('input_artist_name', 'search_rank') }} )  as bandcamp_artist_search_sk
-  , input_artist_name                                                       as bandcamp_input_artist_name
-  , trim ( bandcamp_artist_name )                                           as bandcamp_artist_name
+  , trim ( input_artist_name )                                                    as bandcamp_input_artist_name
+  , trim ( bandcamp_artist_name )                                                 as bandcamp_artist_name
   , bandcamp_url
   , search_rank
-  , rank() over ( partition by input_artist_name order by extract_ts desc ) as dup_rn
+  , rank() over ( partition by input_artist_name order by extract_ts desc )       as dup_rn
 from
   {{ source('bandcamp', 'bandcamp_artist_search') }}
 )

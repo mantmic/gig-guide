@@ -1,11 +1,10 @@
-import lib.bandcamp as bandcamp
-import lib.gcp      as bigquery
-import lib.util     as util
+import lib.unearthed    as unearthed
+import lib.util         as util
+import lib.gcp          as gcp
+
 import config
 
 from prefect import task
-import os
-import time
 import datetime
 
 def get_extracted_artist_names(expiry_period_days = 90):
@@ -19,23 +18,23 @@ def get_extracted_artist_names(expiry_period_days = 90):
         dict: Dictionary of all extracted entities
 
     '''
-    table_name = 'bandcamp_artist_search'
-    if(bigquery.check_table_exists(table_name)):
+    table_name = 'unearthed_artist_search'
+    min_file_name = gcp.get_file_path('unearthed','artist_search',datetime.datetime.now() - datetime.timedelta(days=expiry_period_days))
+    if(gcp.check_table_exists(table_name)):
         results = {}
         # Get extracted results
-        min_extract_ts = datetime.datetime.now() - datetime.timedelta(days=expiry_period_days)
         sql_query = """
         select
-            input_artist_name
+            search_artist_name
         from
             {}.{}
         where
-            extract_ts > '{}'
-        """.format(config.bigquery_dataset_id,table_name,min_extract_ts.isoformat())
-        extracted_entities = bigquery.get_query(sql_query)
+            _file_name > '{}'
+        """.format(config.bigquery_dataset_id,table_name,min_file_name)
+        extracted_entities = gcp.get_query(sql_query)
         # orient into dictionary
         for record in extracted_entities:
-            results[record['input_artist_name']] = True
+            results[record['search_artist_name']] = True
         return(results)
     else:
         return({})
@@ -44,53 +43,44 @@ def get_extracted_artist_names(expiry_period_days = 90):
 @task
 def extract_artist_search(input_data,artist_name_field):
     results = []
-    # get urls from input data
+    # get names from input data
     artist_names = [i.get(artist_name_field) for i in input_data]
     # flatten list
     artist_names = util.flatten(artist_names)
     # get unique artists
     artist_names = list(set(artist_names))
-
     # get already extracted artists
     if(config.extract_type == 'full'):
         extracted_artist_names = {}
     else:
         extracted_artist_names = get_extracted_artist_names()
-
     # iterate
     for artist_name in artist_names:
-        # do not extract if artist has already been extracted
         if(extracted_artist_names.get(artist_name)):
             continue
         print("Searching for artist %s" % artist_name)
         try:
-            results.extend(bandcamp.get_bandcamp_search(artist_name))
-        except:
+            results.extend(unearthed.search_unearthed(artist_name))
+        except Exception as e:
             print("Failed")
+            print(e)
+
     return(results)
 
 @task
-def extract_artist_albums(input_data,bandcamp_url_field):
+def extract_artist_details(input_data,url_field):
     results = []
     # get urls from input data
-    bandcamp_urls = [i.get(bandcamp_url_field) for i in input_data]
+    urls = [i.get(url_field) for i in input_data]
+    # flatten list
+    urls = util.flatten(urls)
+    # get unique artists
+    urls = list(set(urls))
     # iterate
-    for bandcamp_url in bandcamp_urls:
+    for url in urls:
         try:
-            results.extend(bandcamp.get_bandcamp_albums(bandcamp_url))
-        except:
+            results.append(unearthed.get_artist_details(url))
+        except Exception as e:
             print("Failed")
-    return(results)
-
-@task
-def extract_album_details(input_data,bandcamp_album_url_field):
-    results = []
-    # get urls from input data
-    bandcamp_album_urls = [i.get(bandcamp_album_url_field) for i in input_data]
-    # iterate
-    for bandcamp_album_url in bandcamp_album_urls:
-        try:
-            results.append(bandcamp.get_bandcamp_album_details(bandcamp_album_url))
-        except:
-            print("Failed")
+            print(e)
     return(results)

@@ -13,6 +13,10 @@ gcp_bucket_landing = storage_client.get_bucket(config.gcp_bucket_landing)
 
 dataset = bigquery_client.dataset(config.bigquery_dataset_id)
 
+def get_file_path(source_system,table,timestamp):
+    # convert timestamp to string
+    timestamp_string = timestamp.isoformat().replace(':','').replace('.','')
+    return(f"gs://{config.gcp_bucket_landing}/{source_system}/{table}/{table}_{timestamp_string}")
 
 def get_query(query_string):
     '''

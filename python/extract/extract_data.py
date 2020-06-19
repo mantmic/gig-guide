@@ -12,6 +12,7 @@ import get_thebrag          as get_thebrag
 import get_geocode          as get_geocode
 import get_moshtix          as get_moshtix
 import get_bandcamp         as get_bandcamp
+import get_unearthed        as get_unearthed
 
 # evaluate the extract timestamp for all files
 extract_ts = datetime.datetime.now().isoformat().replace(':','').replace('.','')
@@ -20,7 +21,7 @@ extract_ts = datetime.datetime.now().isoformat().replace(':','').replace('.','')
 def load_json_data(data,table,source_system):
     # create directory path
     directory = '/'.join([source_system,table])
-    file_prefix = '_'.join([table,extract_ts])
+    file_prefix = '_'.join([table,datetime.datetime.now().isoformat().replace(':','').replace('.','')])
     job_result = gcp.load_json_data(data,directory,file_prefix)
     # create external table
     table_name = '_'.join([source_system,table])
@@ -39,6 +40,14 @@ def main():
         # extract gigs
         thebrag_gigs = get_thebrag.extract_gigs()
         load_json_data(thebrag_gigs,'gigs','thebrag')
+
+        # search for artists on JJJ unearthed
+        thebrag_unearthed_artist_search = get_unearthed.extract_artist_search(thebrag_gigs,'gig_artist_list')
+        load_json_data(thebrag_unearthed_artist_search,'artist_search','unearthed')
+        # get details from artist urls
+        thebrag_unearthed_artist_details = get_unearthed.extract_artist_details(thebrag_unearthed_artist_search,'unearthed_artist_url')
+        load_json_data(thebrag_unearthed_artist_details,'artist_details','unearthed')
+
         # search for thebrag artists on bandcamp
         thebrag_bandcamp_artist_details = get_bandcamp.extract_artist_search(thebrag_gigs,'gig_artist_list')
         load_json_data(thebrag_bandcamp_artist_details,'artist_search','bandcamp')

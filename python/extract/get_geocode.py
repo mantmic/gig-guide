@@ -42,11 +42,13 @@ def get_geocoded_addresses(geocode_provider = 'arcgis', expiry_period_days = 90)
         return({})
 
 def get_geocode(addresses = []):
+    # get unique items in list
+    unique_addresses = list(set(addresses))
     # initialise results
     results = []
     # get already geocoded adddresses
     geocoded_addresses = get_geocoded_addresses()
-    for address in addresses:
+    for address in unique_addresses:
         # if address already exists, skip
         if(geocoded_addresses.get(address)):
             pass

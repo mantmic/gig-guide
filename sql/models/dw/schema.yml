@@ -67,5 +67,24 @@ models:
           lon: lon
           distance_threshold: 5
           severity: warn
+  - name: dim_artist
+    description: A table containing all artists in the system
+    columns:
+      - name: artist_id
+        tests:
+          - unique
+          - not_null
+  - name: dim_artist_music
+    description: A table containing links to artist music
+    columns:
+      - name: artist_music_id
+        tests:
+          - unique
+          - not_null
+      - name: artist_id
+        tests:
+          - relationships:
+              to: ref('dim_artist')
+              field: artist_id
 
 tags: "api"
