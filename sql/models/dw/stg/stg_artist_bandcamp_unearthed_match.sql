@@ -4,16 +4,16 @@ select
     unearthed.unearthed_artist_id
   , bandcamp.bandcamp_artist_id
 from
-  dev.unearthed_artist unearthed
+  {{ ref('unearthed_artist') }} unearthed
   join
-  dev.bandcamp_artist bandcamp
+  {{ ref('bandcamp_artist') }} bandcamp
     on unearthed.artist_website_url = bandcamp.bandcamp_url
 union distinct
 select
     unearthed.unearthed_artist_id
   , artist_links.bandcamp_artist_id
 from
-  dev.unearthed_artist unearthed
+  {{ ref('unearthed_artist') }} unearthed
   join
-  dev.bandcamp_artist_links artist_links
+  {{ ref('bandcamp_artist_links') }} artist_links
     on unearthed.artist_website_url = artist_links.bandcamp_link_url
