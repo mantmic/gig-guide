@@ -25,11 +25,13 @@ models:
           - relationships:
               to: ref('bandcamp_artist')
               field: bandcamp_artist_id
+              severity: warn
       - name: thebrag_artist_id
         tests:
           - relationships:
               to: ref('thebrag_artist')
               field: thebrag_artist_id
+              severity: warn
   - name: stg_gig_spine
     description: A table containing system gig ids and how they link to other venue source tables
     columns:
@@ -78,6 +80,18 @@ models:
     description: A table containing links to artist music
     columns:
       - name: artist_music_id
+        tests:
+          - unique
+          - not_null
+      - name: artist_id
+        tests:
+          - relationships:
+              to: ref('dim_artist')
+              field: artist_id
+  - name: dim_artist_social
+    description: A table containing social media links related to an artist
+    columns:
+      - name: artist_social_url
         tests:
           - unique
           - not_null

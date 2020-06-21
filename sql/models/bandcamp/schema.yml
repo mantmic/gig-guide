@@ -16,6 +16,20 @@ models:
         tests:
           - unique
           - not_null
+  - name: bandcamp_album_details
+    description: Albums scraped from bandcamp
+    columns:
+      - name: bandcamp_album_id
+        tests:
+          - unique
+          - not_null
+  - name: bandcamp_artist_albums
+    description: Albums scraped from bandcamp
+    columns:
+      - name: bandcamp_album_id
+        tests:
+          - unique
+          - not_null
   - name: bandcamp_artist
     description: Artists from bandcamp
     columns:
@@ -23,5 +37,13 @@ models:
         tests:
           - unique
           - not_null
+  - name: bandcamp_gig
+    description: artist website links from bandcamp
+    columns:
+      - name: gig_url
+        tests:
+          - unique
+          - not_null
+
 
 tags: "bandcamp"

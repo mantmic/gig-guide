@@ -1,5 +1,6 @@
 import lib.geocode  as geocode
 import lib.gcp      as bigquery
+import lib.util     as util
 import config       as config
 
 import datetime
@@ -43,11 +44,15 @@ def get_geocoded_addresses(geocode_provider = 'arcgis', expiry_period_days = 90)
 
 def get_geocode(addresses = []):
     # get unique items in list
-    unique_addresses = list(set(addresses))
+    unique_addresses = list(set([a for a in addresses if a != None]))
     # initialise results
     results = []
     # get already geocoded adddresses
-    geocoded_addresses = get_geocoded_addresses()
+    if(config.extract_type == 'full'):
+        geocoded_addresses = {}
+    else:
+        geocoded_addresses = get_geocoded_addresses()
+
     for address in unique_addresses:
         # if address already exists, skip
         if(geocoded_addresses.get(address)):
@@ -65,4 +70,6 @@ def get_geocode(addresses = []):
 def extract_geocode(input_data,address_field):
     # get addresses from input data
     addresses = [i.get(address_field) for i in input_data]
+    # flatten addresses
+    addresses = util.flatten(addresses)
     return(get_geocode(addresses))

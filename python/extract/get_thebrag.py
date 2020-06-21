@@ -1,4 +1,5 @@
-import lib.thebrag as thebrag
+import lib.thebrag  as thebrag
+import lib.util     as util
 import datetime
 import os
 import time
@@ -10,8 +11,8 @@ extract_days = int(os.getenv('GIG_EXTRACT_DAYS', 1))
 # extract each of these cities
 cities = ['sydney','melbourne']
 
-#set start date to today
-start_date = datetime.datetime.now()
+#get extract start day
+start_date = util.get_extract_start_date()
 
 @task
 def extract_gigs():

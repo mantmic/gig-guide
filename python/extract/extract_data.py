@@ -60,6 +60,10 @@ def main():
         thebrag_bandcamp_artist_album_details = get_bandcamp.extract_album_details(thebrag_bandcamp_artist_albums,'bandcamp_album_url')
         load_json_data(thebrag_bandcamp_artist_album_details,'album_details','bandcamp')
 
+        # geocode shows detailed on bandcamp pages
+        thebrag_bandcamp_artist_geocoded = get_geocode.extract_geocode(thebrag_bandcamp_artist_album_details,'show_locations')
+        load_json_data(thebrag_bandcamp_artist_geocoded,'results','geocode')
+
         # extract gig_details
         thebrag_gig_details = get_thebrag.extract_gig_details(thebrag_gigs)
         load_json_data(thebrag_gig_details,'gig_details','thebrag')

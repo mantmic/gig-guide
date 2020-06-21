@@ -61,6 +61,7 @@ def create_external_table(directory,table_name):
     external_config.source_uris = [
         "gs://{}/{}/*".format(config.gcp_bucket_landing,directory)
     ]
+    external_config.maxBadRecords = 10000
 
     external_config.autodetect = True
 

@@ -14,7 +14,7 @@ where
 select
     thebrag_gig_id
   , thebrag_artist_name
-  , {{ dbt_utils.surrogate_key('thebrag_artist_name') }} as thebrag_artist_id
+  , to_hex ( {{ dbt_utils.surrogate_key('thebrag_artist_name') }} ) as thebrag_artist_id
 from
   artist_clean
 where
