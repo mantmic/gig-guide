@@ -48,6 +48,7 @@ jobs:
         GIG_EXTRACT_DAYS: 1
         GCP_BUCKET_LANDING: "melbourne-gig-guide-landing-dev"
         GCP_BUCKET_NAME: "melbourne-gig-guide-public-test"
+        EXTRACT_TYPE: "incremental"
       if: github.ref != 'refs/heads/master'
     - name: set prod environment variables
       uses: allenevans/set-env@v1.0.0
@@ -57,6 +58,7 @@ jobs:
         GIG_EXTRACT_DAYS: 3
         GCP_BUCKET_LANDING: "melbourne-gig-guide-landing-prod"
         GCP_BUCKET_NAME: "melbourne-gig-guide-public"
+        EXTRACT_TYPE: "full"
       if: github.ref == 'refs/heads/master'
     - name: Run extract scripts
       working-directory: python

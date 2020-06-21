@@ -37,6 +37,13 @@ models:
         tests:
           - unique
           - not_null
+  - name: bandcamp_gig
+    description: artist website links from bandcamp
+    columns:
+      - name: gig_url
+        tests:
+          - unique
+          - not_null
 
 
 tags: "bandcamp"
