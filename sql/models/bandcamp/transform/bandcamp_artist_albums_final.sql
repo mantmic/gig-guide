@@ -1,9 +1,9 @@
 {{ config(materialized='table') }}
-select distinct
+
+select
     bandcamp_artist_id
-  , bandcamp_artist_name
-  , bandcamp_url
-  , bandcamp_artist_location
-  , bandcamp_artist_bio
+  , bandcamp_album_id
+  , bandcamp_album_url
+  , bandcamp_embedded_player_link
 from
   {{ ref('bandcamp_artist_details_combined') }}
