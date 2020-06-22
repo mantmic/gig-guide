@@ -1,6 +1,6 @@
 {{ config(materialized='table') }}
 
-select
+select distinct 
     gigs.thebrag_gig_id
   , gigs.thebrag_gig_url
   , gigs.thebrag_venue_id

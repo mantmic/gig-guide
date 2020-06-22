@@ -28,6 +28,7 @@ select
     to_hex ( {{ dbt_utils.surrogate_key('thebrag_gig_id','bandcamp_gig_id') }} )  as gig_id
   , bandcamp.bandcamp_gig_id
   , thebrag.thebrag_gig_id
+  , coalesce ( bandcamp.venue_id, thebrag.venue_id )                              as venue_id
 from
   bandcamp
   full outer join

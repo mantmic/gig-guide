@@ -1,4 +1,4 @@
-{{ config(materialized='view') }}
+{{ config(materialized='table') }}
 
 -- get geocode_location_ids for venues
 with thebrag_geocoded as
@@ -21,7 +21,7 @@ from
   {{ ref('geocode_results') }} geocode
     on bandcamp.bandcamp_venue_location = geocode.geocode_input_address
 ),
-results_combined
+results_combined as 
 ( select
     thebrag_geocoded.thebrag_venue_id
   , bandcamp_geocoded.bandcamp_venue_id

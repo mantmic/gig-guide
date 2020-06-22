@@ -32,7 +32,7 @@ from
   dup_data
 )
 select
-    to_hex ( {{ dbt_utils.surrogate_key('bandcamp_venue_id','gig_date') }} )  as bandcamp_gig_id
+    to_hex ( {{ dbt_utils.surrogate_key('gig_url') }} )  as bandcamp_gig_id
   , bandcamp_artist_id
   , bandcamp_venue_location
   , bandcamp_venue_name

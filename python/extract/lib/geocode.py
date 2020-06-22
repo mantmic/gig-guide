@@ -2,7 +2,7 @@ import geocoder
 import datetime
 
 def get_geocode(input_address):
-    g = geocoder.arcgis(input_address)
+    g = geocoder.google(input_address)
     return({
         'input_address':input_address,
         'geocode_provider':g.provider,
