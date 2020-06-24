@@ -44,6 +44,13 @@ models:
         tests:
           - unique
           - not_null
+  - name: bandcamp_venue
+    description: Gig vanues scraped from bandcamp
+    columns:
+      - name: bandcamp_venue_id
+        tests:
+          - unique
+          - not_null
 
 
 tags: "bandcamp"

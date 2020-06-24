@@ -7,8 +7,10 @@ import datetime
 from prefect import task
 
 geocode_result_table = 'geocode_results'
+geocode_provider = 'google'
 
-def get_geocoded_addresses(geocode_provider = 'arcgis', expiry_period_days = 90):
+
+def get_geocoded_addresses(expiry_period_days = 90):
     '''
     Function to get addresses that have already been geocoded
 
@@ -48,10 +50,11 @@ def get_geocode(addresses = []):
     # initialise results
     results = []
     # get already geocoded adddresses
-    if(config.extract_type == 'full'):
-        geocoded_addresses = {}
-    else:
-        geocoded_addresses = get_geocoded_addresses()
+    #if(config.extract_type == 'full'):
+        #geocoded_addresses = {}
+    #else:
+        #geocoded_addresses = get_geocoded_addresses()
+    geocoded_addresses = get_geocoded_addresses()
 
     for address in unique_addresses:
         # if address already exists, skip

@@ -10,7 +10,14 @@ from
 )
 select
     search.*
-  , album.*
+  , album.bandcamp_album_id
+  , album.bandcamp_album_url
+  , album.bandcamp_embedded_player_link
+  , album.bandcamp_artist_location
+  , replace ( album.bandcamp_artist_bio, '...more', '' ) as bandcamp_artist_bio
+  , album.band_links
+  , album.band_showography
+  , album.extract_ts
 from
   distinct_search_results search
   join
