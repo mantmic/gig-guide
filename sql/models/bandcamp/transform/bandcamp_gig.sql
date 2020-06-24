@@ -3,10 +3,10 @@
 with dup_data as
 ( select
     artist_albums.bandcamp_artist_id
-  , bandcamp_gigs.show_location_full                                      as bandcamp_venue_location
-  , bandcamp_gigs.show_venue                                              as bandcamp_venue_name
-  , to_hex ( {{ dbt_utils.surrogate_key('bandcamp_gigs.show_venue') }} )  as bandcamp_venue_id
-  , bandcamp_gigs.show_url                                                as gig_url
+  , bandcamp_gigs.show_location_full                                              as bandcamp_venue_location
+  , bandcamp_gigs.show_venue                                                      as bandcamp_venue_name
+  , to_hex ( {{ dbt_utils.surrogate_key('bandcamp_gigs.show_location_full') }} )  as bandcamp_venue_id
+  , bandcamp_gigs.show_url                                                        as gig_url
   , parse_date ( '%b %d %E4Y', bandcamp_gigs.show_date || ' ' || extract ( year from album_details.extract_ts ) ) as gig_date
   , cast ( album_details.extract_ts as date ) as extract_date
 from
