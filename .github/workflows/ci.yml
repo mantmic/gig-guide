@@ -64,6 +64,8 @@ jobs:
       working-directory: python
       run: |
         python3 extract/extract_data.py
+      env:
+        GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
     - name: dbt run
       working-directory: sql
       run: |
