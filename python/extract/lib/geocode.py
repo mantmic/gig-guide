@@ -9,6 +9,6 @@ def get_geocode(input_address):
         'input_address':input_address,
         'geocode_provider':g.provider,
         'extract_ts':datetime.datetime.now().isoformat(),
-        'geojson_result':g.geojson,
+        #'geojson_result':g.geojson,
         'json_result':g.json
     })
