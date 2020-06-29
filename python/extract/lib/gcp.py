@@ -62,7 +62,7 @@ def create_external_table(directory,table_name):
         "gs://{}/{}/*".format(config.gcp_bucket_landing,directory)
     ]
     external_config.maxBadRecords = 10000
-
+    external_config.ignoreUnknownValues = True
     external_config.autodetect = True
 
     table.external_data_configuration = external_config

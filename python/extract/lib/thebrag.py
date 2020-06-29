@@ -21,6 +21,7 @@ def get_gigs(date = datetime.datetime.now(),city = 'melbourne'):
         gig_url = gig.findChild('a').get('href')
         gig_artist = gig.findNext('div',class_='gig-artist').text
         gig_artist_list = gig_artist.split(',')
+        gig_artist_list = [a.strip() for a in gig_artist_list]
         gig_location = gig.findNext('div',class_='gig-location').text
         gig_location_url = gig.findNext('div',class_='gig-location').findChild('a').get('href')
         # append record

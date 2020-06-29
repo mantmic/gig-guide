@@ -133,11 +133,14 @@ def get_bandcamp_album_details(url):
     except:
         pass
     # band links
+    response['band_links'] = []
     try:
         response['band_links'] = [{'link_text':a.text,'link_url':a.get('href')} for a in soup.find('ol',id='band-links').findAll('a')]
     except:
         pass
     # band shows
+    response['band_showography'] = []
+    response['show_locations'] = []
     try:
         response['band_showography'] = [{
             'show_date':li.find('div',class_='showDate').text,
