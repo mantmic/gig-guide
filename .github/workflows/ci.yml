@@ -12,6 +12,8 @@ env:
   GOOGLE_APPLICATION_CREDENTIALS: "/tmp/google-account.json"
   GCP_PROJECT_ID: "melbourne-gig-guide"
   GCP_LOCATION: "australia-southeast1"
+  SPOTIPY_CLIENT_ID: ${{ secrets.SPOTIPY_CLIENT_ID }}
+  SPOTIPY_CLIENT_SECRET: ${{ secrets.SPOTIPY_CLIENT_SECRET }}
 
 jobs:
   elt:
