@@ -7,14 +7,14 @@ retry_max_count = int(os.getenv('REQUEST_RETRY_COUNT', 3))
 retry_sleep_time = int(os.getenv('REQUEST_FAILURE_SLEEP_TIME', 35))
 
 
-def get_soup(url):
+def get_soup(url, headers = {}):
     retry_count = 0
     print("Scraping url %s" % url)
     success = False
     res = None
     while success == False and retry_count < retry_max_count:
         try:
-            res = requests.get(url)
+            res = requests.get(url,headers=headers)
             res = BeautifulSoup(res.text,'html.parser')
             success = True
         except:
