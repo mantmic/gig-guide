@@ -13,6 +13,7 @@ import get_geocode          as get_geocode
 import get_moshtix          as get_moshtix
 import get_bandcamp         as get_bandcamp
 import get_unearthed        as get_unearthed
+import get_spotify          as get_spotify 
 
 # evaluate the extract timestamp for all files
 extract_ts = datetime.datetime.now().isoformat().replace(':','').replace('.','')
@@ -41,9 +42,18 @@ def main():
         thebrag_gigs = get_thebrag.extract_gigs()
         load_json_data(thebrag_gigs,'gigs','thebrag')
 
+        # search arists on spotify 
+        thebrag_artist_spotify = get_spotify.extract_artist_search(thebrag_gigs,'gig_artist_list')
+        load_json_data(thebrag_artist_spotify,'artist_search','spotify')
+
+        # get artist top spotify tracks 
+        thebrag_artist_spotify = get_spotify.extract_artist_top_tracks(thebrag_artist_spotify,'result_artist_ids')
+        load_json_data(thebrag_artist_spotify,'artist_top_tracks','spotify')
+
         # search for artists on JJJ unearthed
         thebrag_unearthed_artist_search = get_unearthed.extract_artist_search(thebrag_gigs,'gig_artist_list')
         load_json_data(thebrag_unearthed_artist_search,'artist_search','unearthed')
+        
         # get details from artist urls
         thebrag_unearthed_artist_details = get_unearthed.extract_artist_details(thebrag_unearthed_artist_search,'unearthed_artist_url')
         load_json_data(thebrag_unearthed_artist_details,'artist_details','unearthed')
@@ -67,9 +77,11 @@ def main():
         # extract gig_details
         thebrag_gig_details = get_thebrag.extract_gig_details(thebrag_gigs)
         load_json_data(thebrag_gig_details,'gig_details','thebrag')
+        
         # geocode gig detail addresses
         thebrag_geocoded_addresses = get_geocode.extract_geocode(thebrag_gig_details,'gig_location_address')
         load_json_data(thebrag_geocoded_addresses,'results','geocode')
+        
         # get additional gig details from links
         thebrag_moshtix_gig_details = get_moshtix.extract_gig_details(thebrag_gig_details,'gig_ticket_url')
         load_json_data(thebrag_moshtix_gig_details,'gig_details','moshtix')
