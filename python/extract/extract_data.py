@@ -14,6 +14,7 @@ import get_moshtix          as get_moshtix
 import get_bandcamp         as get_bandcamp
 import get_unearthed        as get_unearthed
 import get_spotify          as get_spotify 
+import get_google           as get_google
 
 # evaluate the extract timestamp for all files
 extract_ts = datetime.datetime.now().isoformat().replace(':','').replace('.','')
@@ -41,6 +42,10 @@ def main():
         # extract gigs
         thebrag_gigs = get_thebrag.extract_gigs()
         load_json_data(thebrag_gigs,'gigs','thebrag')
+
+        # search arists on google 
+        thebrag_artist_google_search = get_google.extract_google_search(thebrag_gigs,'gig_artist_list')
+        load_json_data(thebrag_artist_google_search,'search','google')
 
         # search arists on spotify 
         thebrag_artist_spotify = get_spotify.extract_artist_search(thebrag_gigs,'gig_artist_list')
