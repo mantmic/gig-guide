@@ -16,6 +16,8 @@ def extract_google_search(input_data,query_field):
     for query in queries:
         try:
             results.append(google.extract_google_search(query))
-        except:
+        except Exception as e:
             print("Failed")
+            print(e)
+
     return(results)

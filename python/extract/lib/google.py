@@ -22,15 +22,14 @@ def extract_google_search(query):
 
     # get bio, bio link
     try:
-        bio_div = sidebar_section.find('div',style='border-bottom:1px solid #EBEBEB').findNext('div')
-
+        bio_div = sidebar_section.find('h2',text='Description').findNext('div')
         result['bio_text'] = bio_div.find('span').text
         result['bio_link_url'] = bio_div.find('a').get('href')
     except:
         pass
 
     # get other info like genres and stuff 
-    other_info = {}
+    other_info = []
 
     try:
         other_info_section = sidebar_section.find('h2',text='Description').findNext('div')
@@ -42,7 +41,10 @@ def extract_google_search(query):
             other_info_key = links[0].text.lower()
             other_info_key = other_info_key.replace(' ','_')
             other_info_values = [l.text for l in links[1:]]
-            other_info[other_info_key] = other_info_values
+            other_info.append({
+                'description':other_info_key,
+                'value':other_info_values
+            })
     except:
         pass
     result['other_info'] = other_info
