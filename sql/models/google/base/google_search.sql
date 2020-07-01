@@ -10,6 +10,7 @@ with dup_data as
   , events
   , music_platform_links
   , bio_link_url 
+  , social_media_links
   , row_number() over ( partition by input_query order by _file_name desc ) as dup_rn
 from 
   {{ source('google', 'google_search') }}
@@ -22,6 +23,7 @@ select
   , other_info
   , events
   , music_platform_links
+  , social_media_links
   , bio_link_url 
 from 
     dup_data 

@@ -14,6 +14,27 @@ models:
         tests:
           - unique
           - not_null
+  - name: google_search_artist_details
+    description: Artist information from google search 
+    columns:
+      - name: google_search_artist_id
+        tests:
+          - unique
+          - not_null
+  - name: google_search_artist
+    description: Artists extracted from google search  
+    columns:
+      - name: google_search_artist_id
+        tests:
+          - unique
+          - not_null
+  - name: google_search_artist_music_platform
+    description: Music platform links for google artists 
+    columns:
+      - name: music_platform_url 
+        tests:
+          - unique
+          - not_null
 
 
 tags: "google"

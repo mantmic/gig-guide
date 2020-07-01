@@ -51,6 +51,10 @@ def main():
         thebrag_artist_google_search = get_google.extract_google_search(thebrag_gigs,'gig_artist_list')
         load_json_data(thebrag_artist_google_search,'search','google')
 
+        # geocode artist google events 
+        thebrag_artist_google_search_event_geocode = get_geocode.extract_geocode(thebrag_artist_google_search,'event_venue_locations')
+        load_json_data(thebrag_artist_google_search_event_geocode,'results','geocode')
+
         # search arists on spotify 
         thebrag_artist_spotify = get_spotify.extract_artist_search(thebrag_gigs,'gig_artist_list')
         load_json_data(thebrag_artist_spotify,'artist_search','spotify')
