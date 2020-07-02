@@ -21,14 +21,18 @@ extract_ts = datetime.datetime.now().isoformat().replace(':','').replace('.','')
 # common task to load json data into bigquery
 @task
 def load_json_data(data,table,source_system):
-    # create directory path
-    directory = '/'.join([source_system,table])
-    file_prefix = '_'.join([table,datetime.datetime.now().isoformat().replace(':','').replace('.','')])
-    job_result = gcp.load_json_data(data,directory,file_prefix)
-    # create external table
-    table_name = '_'.join([source_system,table])
-    gcp.create_external_table(directory,table_name)
-    return(job_result)
+    if len(data) > 0:
+        # create directory path
+        directory = '/'.join([source_system,table])
+        file_prefix = '_'.join([table,datetime.datetime.now().isoformat().replace(':','').replace('.','')])
+        job_result = gcp.load_json_data(data,directory,file_prefix)
+        # create external table
+        table_name = '_'.join([source_system,table])
+        gcp.create_external_table(directory,table_name)
+        return(job_result)
+    else:
+        print("No data")
+        return
 
 
 def main():
@@ -46,6 +50,10 @@ def main():
         # search arists on google 
         thebrag_artist_google_search = get_google.extract_google_search(thebrag_gigs,'gig_artist_list')
         load_json_data(thebrag_artist_google_search,'search','google')
+
+        # geocode artist google events 
+        thebrag_artist_google_search_event_geocode = get_geocode.extract_geocode(thebrag_artist_google_search,'event_venue_locations')
+        load_json_data(thebrag_artist_google_search_event_geocode,'results','geocode')
 
         # search arists on spotify 
         thebrag_artist_spotify = get_spotify.extract_artist_search(thebrag_gigs,'gig_artist_list')

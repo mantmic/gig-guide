@@ -8,7 +8,7 @@ def extract_google_search(query):
 
     url = 'https://www.google.com/search?q={}'.format(parse.quote(query))
 
-    USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:65.0) Gecko/20100101 Firefox/65.0"
+    USER_AGENT = "Mozilla/5.0 (X11; Linux i686; rv:77.0) Gecko/20100101 Firefox/77.0"
     headers = {"user-agent" : USER_AGENT}
 
     soup = scrape.get_soup(url,headers)
@@ -22,15 +22,14 @@ def extract_google_search(query):
 
     # get bio, bio link
     try:
-        bio_div = sidebar_section.find('div',style='border-bottom:1px solid #EBEBEB').findNext('div')
-
+        bio_div = sidebar_section.find('h2',text='Description').findNext('div')
         result['bio_text'] = bio_div.find('span').text
         result['bio_link_url'] = bio_div.find('a').get('href')
     except:
-        pass
+        print("bio failed")
 
     # get other info like genres and stuff 
-    other_info = {}
+    other_info = []
 
     try:
         other_info_section = sidebar_section.find('h2',text='Description').findNext('div')
@@ -42,9 +41,12 @@ def extract_google_search(query):
             other_info_key = links[0].text.lower()
             other_info_key = other_info_key.replace(' ','_')
             other_info_values = [l.text for l in links[1:]]
-            other_info[other_info_key] = other_info_values
+            other_info.append({
+                'description':other_info_key,
+                'value':other_info_values
+            })
     except:
-        pass
+        print("other info failed")
     result['other_info'] = other_info
 
     # get music platforms
@@ -57,7 +59,7 @@ def extract_google_search(query):
                 'description':td.find('span',class_='hl').text
             })
     except:
-        pass
+        print("music platform faild")
     
     result['music_platform_links'] = music_platform_links
 
@@ -75,10 +77,11 @@ def extract_google_search(query):
                 'event_description_full':div.find('a').get_text(' ')
             })
     except:
-        pass
+        print("events failed")
 
     result['events'] = events
-
+    # also put the event locations on the result object for easier geocoding 
+    result['event_venue_locations'] = [e.get('event_venue_location') for e in events]
     # get social media links 
     social_media_links = []
     try:
@@ -89,7 +92,7 @@ def extract_google_search(query):
                 'description':smo.text
             })
     except:
-        pass
+        print("social media failed")
 
     result['social_media_links'] = social_media_links
 
@@ -106,7 +109,7 @@ def extract_google_search(query):
             })
             video_order += 1
     except:
-        pass
+        print("videos failed")
     result['videos'] = videos 
 
     # get search results 
@@ -121,7 +124,7 @@ def extract_google_search(query):
             })
             search_result_order += 1
     except:
-        pass
+        print("search results failed")
 
     result['search_results'] = search_results
     return(result)
