@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: spotify
+    schema: "{{ env_var('LANDING_DATASET_ID', 'landing_dev') }}"
+    tables:
+      - name: spotify_artist_search
+      - name: spotify_artist_top_tracks
+
+tags: "spotify"
