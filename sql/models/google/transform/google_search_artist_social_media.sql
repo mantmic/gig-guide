@@ -1,6 +1,6 @@
 {{ config(materialized='view') }}
 
-select
+select distinct
     artist.google_search_artist_id 
   , {{ clean_url('social.url') }}   as social_media_url
   , lower ( social.description )    as social_media_platform

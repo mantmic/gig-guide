@@ -35,6 +35,13 @@ models:
         tests:
           - unique
           - not_null
+  - name: google_search_artist_social_media
+    description: Music platform links for google artists 
+    columns:
+      - name: social_media_url 
+        tests:
+          - unique
+          - not_null
 
 
 tags: "google"

@@ -44,6 +44,36 @@ models:
           - relationships:
               to: ref('thebrag_gig_final')
               field: thebrag_gig_id
+  - name: stg_artist_bandcamp_unearthed_match
+    columns:
+      - name: unearthed_artist_id
+        tests:
+          - unique
+          - not_null
+      - name: bandcamp_artist_id
+        tests:
+          - unique
+          - not_null
+  - name: stg_artist_google_bandcamp_match
+    columns:
+      - name: google_search_artist_id
+        tests:
+          - unique
+          - not_null
+      - name: bandcamp_artist_id
+        tests:
+          - unique
+          - not_null
+  - name: stg_artist_google_unearthed_match
+    columns:
+      - name: google_search_artist_id
+        tests:
+          - unique
+          - not_null
+      - name: unearthed_artist_id
+        tests:
+          - unique
+          - not_null
   - name: dim_gig
     description: A table containing system gigs
     columns:

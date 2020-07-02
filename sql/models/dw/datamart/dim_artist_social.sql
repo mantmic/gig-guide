@@ -18,6 +18,15 @@ from
   join
   {{ ref('stg_artist_spine') }} spine
     using ( unearthed_artist_id )
+union distinct 
+select
+    spine.artist_id
+  , google.social_media_url as artist_social_url
+from
+  {{ ref('stg_artist_spine') }} spine
+  join
+  {{ ref('google_search_artist_social_media') }} google 
+    using ( google_search_artist_id )
 )
 , link_classification as
 ( select
@@ -39,13 +48,3 @@ from
   left outer join
   link_classification classification
     using ( artist_social_url )
-union distinct 
-select
-    spine.artist_id
-  , google.social_media_url
-  , google.social_media_platform
-from
-  {{ ref('stg_artist_spine') }} spine
-  join
-  {{ ref('google_search_artist_social_media') }} google 
-    using ( google_search_artist_id ) 

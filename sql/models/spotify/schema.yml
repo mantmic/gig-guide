@@ -7,4 +7,24 @@ sources:
       - name: spotify_artist_search
       - name: spotify_artist_top_tracks
 
+models:
+  - name: spotify_artist
+    description: Table containing spotify artists
+    columns:
+      - name: spotify_artist_id
+        tests:
+          - unique
+          - not_null
+      - name: artist_name
+        tests:
+          - unique
+          - not_null
+  - name: spotify_artist_tracks
+    description: Table containing spotify tracks
+    columns:
+      - name: track_url
+        tests:
+          - unique
+          - not_null
+
 tags: "spotify"
