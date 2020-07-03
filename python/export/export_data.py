@@ -12,7 +12,8 @@ client = bigquery.Client()
 
 # list of tables to export
 table_export_list = [
-    {"table_id":"venue","file_name":"melbourne/venue"}
+    {"table_id":"venue","file_name":"venue"},
+    {"table_id":"artist","file_name":"artist"}
 ]
 
 for table in table_export_list:
