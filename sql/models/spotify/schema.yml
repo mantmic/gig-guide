@@ -24,7 +24,8 @@ models:
     columns:
       - name: track_url
         tests:
-          - unique
+          - unique:
+              severity: warn
           - not_null
 
 tags: "spotify"

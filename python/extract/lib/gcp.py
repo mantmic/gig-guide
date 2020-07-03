@@ -62,7 +62,7 @@ def create_external_table(directory,table_name):
         "gs://{}/{}/*".format(config.gcp_bucket_landing,directory)
     ]
     external_config.maxBadRecords = 10000
-    external_config.ignoreUnknownValues = True
+    #external_config.ignoreUnknownValues = True
     external_config.autodetect = True
 
     table.external_data_configuration = external_config
@@ -73,6 +73,11 @@ def create_external_table(directory,table_name):
     create_table = bigquery_client.create_table(table)  # API request
     return(create_table)
 
+def preprocess_row(row):
+    # remove empty lists 
+    row = {k:v for (k,v) in row.items() if v != []}
+    return(row)
+
 def load_json_data(data,directory,file_prefix):
     '''
     Loads JSON data into GCP and create external dataset in Bigquery
@@ -80,6 +85,8 @@ def load_json_data(data,directory,file_prefix):
     if(len(data) == 0):
         print("No results to push")
         return()
+    # preprocess rows 
+    data = [preprocess_row(row) for row in data]
     # append a random string to the file name to avoid conflicts
     file_name = '_'.join([file_prefix,str(uuid.uuid1())])
     # get full path
