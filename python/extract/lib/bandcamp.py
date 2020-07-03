@@ -133,24 +133,24 @@ def get_bandcamp_album_details(url):
     except:
         pass
     # band links
-    response['band_links'] = []
     try:
         response['band_links'] = [{'link_text':a.text,'link_url':a.get('href')} for a in soup.find('ol',id='band-links').findAll('a')]
     except:
         pass
     # band shows
-    response['band_showography'] = []
     response['show_locations'] = []
     try:
-        response['band_showography'] = [{
-            'show_date':li.find('div',class_='showDate').text,
-            'show_url':li.find('a').get('href'),
-            'show_venue':li.find('div',class_='showVenue').text,
-            'show_location':li.find('div',class_='showLoc').text,
-            'show_location_full':', '.join([li.find('div',class_='showVenue').text,li.find('div',class_='showLoc').text])
-        } for li in soup.find('div',id='showography').findAll('li')]
-        # create seperate object for passing into geocoding functions
-        response['show_locations'] = [l.get('show_location_full') for l in response['band_showography']]
+        band_shows = soup.find('div',id='showography').findAll('li')
+        if len(band_shows) > 0:
+            response['band_showography'] = [{
+                'show_date':li.find('div',class_='showDate').text,
+                'show_url':li.find('a').get('href'),
+                'show_venue':li.find('div',class_='showVenue').text,
+                'show_location':li.find('div',class_='showLoc').text,
+                'show_location_full':', '.join([li.find('div',class_='showVenue').text,li.find('div',class_='showLoc').text])
+            } for li in band_shows]
+            # create seperate object for passing into geocoding functions
+            response['show_locations'] = [l.get('show_location_full') for l in response['band_showography']]
     except:
         pass
     return(response)
