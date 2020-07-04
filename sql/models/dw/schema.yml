@@ -86,6 +86,25 @@ models:
           - relationships:
               to: ref('dim_venue')
               field: venue_id
+  - name: dim_gig_artist
+    description: A table containing system gigs
+    columns:
+      - name: gig_artist_sk
+        tests:
+          - unique
+          - not_null
+      - name: gig_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_gig')
+              field: gig_id
+      - name: artist_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_artist')
+              field: artist_id
   - name: dim_venue
     description: Describes every live music venue in the system
     columns:

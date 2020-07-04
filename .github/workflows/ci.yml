@@ -57,7 +57,7 @@ jobs:
       with:
         BIGQUERY_DATASET_ID: "prod"
         LANDING_DATASET_ID: "landing"
-        GIG_EXTRACT_DAYS: 3
+        GIG_EXTRACT_DAYS: 7
         GCP_BUCKET_LANDING: "melbourne-gig-guide-landing-prod"
         GCP_BUCKET_NAME: "melbourne-gig-guide-public"
         EXTRACT_TYPE: "full"

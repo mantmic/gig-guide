@@ -7,5 +7,3 @@ select
    , lon
 from
   {{ ref('dim_venue') }}
-where
-  venue_city = 'melbourne'
