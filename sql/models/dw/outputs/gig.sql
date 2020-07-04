@@ -20,7 +20,7 @@ group by
 )
 select
     gig.gig_id
-  , gig.gig_date
+  , cast ( gig.gig_date as string ) as gig_date 
   , gig.gig_url
   , gig.gig_price
   , gig_artist.artists
