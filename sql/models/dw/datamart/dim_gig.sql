@@ -15,5 +15,5 @@ from
   {{ ref('moshtix_gig_details_final') }} moshtix
     on thebrag.gig_ticket_url = moshtix.moshtix_url
   left join
-  {{ ref('bandcamp_gig') }} bandcamp
+  {{ ref('bandcamp_gig_final') }} bandcamp
     using ( bandcamp_gig_id )

@@ -19,7 +19,7 @@ def get_extracted_artist_names(expiry_period_days = 90):
 
     '''
     table_name = 'unearthed_artist_search'
-    min_file_name = gcp.get_file_path('unearthed','artist_search',datetime.datetime.now() - datetime.timedelta(days=expiry_period_days))
+    min_extract_ts = datetime.datetime.now() - datetime.timedelta(days=expiry_period_days)
     if(gcp.check_table_exists(table_name)):
         results = {}
         # Get extracted results
@@ -29,8 +29,8 @@ def get_extracted_artist_names(expiry_period_days = 90):
         from
             {}.{}
         where
-            _file_name > '{}'
-        """.format(config.bigquery_dataset_id,table_name,min_file_name)
+            extract_ts > '{}'
+        """.format(config.bigquery_dataset_id,table_name,min_extract_ts.isoformat())
         extracted_entities = gcp.get_query(sql_query)
         # orient into dictionary
         for record in extracted_entities:

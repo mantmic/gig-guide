@@ -7,14 +7,14 @@ import lib.gcp              as gcp
 import config               as config
 
 # import extract scripts
-import get_datamelbourne    as get_datamelbourne
-import get_thebrag          as get_thebrag
-import get_geocode          as get_geocode
-import get_moshtix          as get_moshtix
-import get_bandcamp         as get_bandcamp
-import get_unearthed        as get_unearthed
-import get_spotify          as get_spotify 
-import get_google           as get_google
+import tasks.get_datamelbourne    as get_datamelbourne
+import tasks.get_thebrag          as get_thebrag
+import tasks.get_geocode          as get_geocode
+import tasks.get_moshtix          as get_moshtix
+import tasks.get_bandcamp         as get_bandcamp
+import tasks.get_unearthed        as get_unearthed
+import tasks.get_spotify          as get_spotify 
+import tasks.get_google           as get_google
 
 # evaluate the extract timestamp for all files
 extract_ts = datetime.datetime.now().isoformat().replace(':','').replace('.','')
@@ -26,9 +26,6 @@ def load_json_data(data,table,source_system):
         directory = '/'.join([source_system,table])
         file_prefix = '_'.join([table,datetime.datetime.now().isoformat().replace(':','').replace('.','')])
         job_result = gcp.load_json_data(data,directory,file_prefix)
-        # create external table
-        table_name = '_'.join([source_system,table])
-        gcp.create_external_table(directory,table_name)
         return(job_result)
     else:
         print("No data")

@@ -11,9 +11,9 @@ select
     , artist.artist_music
     ) ) as artists
 from 
-  dev.dim_gig_artist gig_artist
+  {{ ref('dim_gig_artist') }} gig_artist
   join
-  dev.artist artist 
+  {{ ref('artist') }} artist 
     using ( artist_id ) 
 group by 
   gig_artist.gig_id

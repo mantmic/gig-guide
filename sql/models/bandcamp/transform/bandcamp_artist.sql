@@ -8,7 +8,7 @@ with dup_data as
   , bandcamp_artist_bio
   , row_number() over ( partition by bandcamp_artist_id order by extract_ts desc ) as dup_rn
 from
-  {{ ref('bandcamp_artist_details_combined') }}
+  {{ ref('bandcamp_artist_details_combined_final') }}
 )
 select
     bandcamp_artist_id

@@ -27,6 +27,13 @@ from
   join
   {{ ref('google_search_artist_social_media') }} google 
     using ( google_search_artist_id )
+union distinct 
+-- include artist websites in case they are social media pages 
+select
+    artist.artist_id
+  , artist.artist_website_url as artist_social_url
+from 
+  {{ ref('dim_artist') }} artist 
 )
 , link_classification as
 ( select
@@ -43,8 +50,10 @@ select
     artist_links.artist_id
   , artist_links.artist_social_url
   , classification.social_media_website
+  , case when classification.social_media_website = 'instagram' then ARRAY_REVERSE ( SPLIT ( artist_links.artist_social_url,'/' ) )[SAFE_OFFSET(0)]
+    end as social_media_handle 
 from
   artist_links
-  left outer join
+  join
   link_classification classification
     using ( artist_social_url )

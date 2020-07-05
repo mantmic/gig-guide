@@ -132,6 +132,11 @@ models:
         tests:
           - unique
           - not_null
+      - name: artist_music_url
+        tests:
+          - unique:
+              severity: warn
+          - not_null
       - name: artist_id
         tests:
           - relationships:

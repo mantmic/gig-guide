@@ -8,7 +8,7 @@ with dup_data as
   , band_links
   , band_showography
   , extract_ts
-  , row_number() over ( partition by bandcamp_album_url order by _file_name desc ) as dup_rn
+  , row_number() over ( partition by bandcamp_album_url order by extract_ts desc ) as dup_rn
 from
   {{ source('bandcamp', 'bandcamp_album_details') }}
 )

@@ -1,10 +1,15 @@
 import config as config
+import lib.util as util 
+
 from google.cloud import bigquery
 from google.cloud import storage
 
 from google.cloud.exceptions import NotFound
 import json
 import uuid
+import datetime
+
+extract_ts = datetime.datetime.now().isoformat()
 
 bigquery_client = bigquery.Client()
 storage_client = storage.Client()
@@ -31,27 +36,13 @@ def get_query(query_string):
     df = query_job.to_dataframe()
     return(json.loads(df.to_json(orient='records')))
 
-
-
-def _load_json_data(data,table,directory):
-    '''
-    Loads JSON data into GCP and create external dataset in Bigquery
-    '''
-    if(len(data) == 0):
-        print("No results to push")
-        return()
-    # cast to and from json to cast all fields to strings
-    converted_data = json.loads(json.dumps(data),parse_float=str, parse_int=str, parse_constant=str)
-    bq_table = dataset.table(table)
-    job_config = bigquery.LoadJobConfig()
-    job_config.source_format = bigquery.SourceFormat.NEWLINE_DELIMITED_JSON
-    job_config.write_disposition = bigquery.WriteDisposition.WRITE_APPEND
-    job_config.schema_update_options = [
-        bigquery.SchemaUpdateOption.ALLOW_FIELD_ADDITION
-    ]
-    job = bigquery_client.load_table_from_json(converted_data, bq_table, job_config = job_config)
-    return(job.result())
-
+def get_blob_data(file_path):
+    blob = gcp_bucket_landing.blob(file_path)
+    data = []
+    blob_string = blob.download_as_string()
+    for row in blob_string.decode("utf-8").split('\n'):
+        data.append(json.loads(row))
+    return(data)
 
 def create_external_table(directory,table_name):
     table = bigquery.Table(dataset.table(table_name))
@@ -61,7 +52,7 @@ def create_external_table(directory,table_name):
     external_config.source_uris = [
         "gs://{}/{}/*".format(config.gcp_bucket_landing,directory)
     ]
-    external_config.maxBadRecords = 10000
+    external_config.max_bad_records = 10000
     #external_config.ignoreUnknownValues = True
     external_config.autodetect = True
 
@@ -75,8 +66,70 @@ def create_external_table(directory,table_name):
 
 def preprocess_row(row):
     # remove empty lists 
-    row = {k:v for (k,v) in row.items() if v != []}
+    util.remove_empty_lists(row)
+    row['extract_ts'] = extract_ts
     return(row)
+
+def push_data_blob(data,file_path):
+    print("Pushing data to %s" % file_path)
+    blob = gcp_bucket_landing.blob(file_path)
+    # convert data to newline delimited json
+    converted_data = "\n".join([json.dumps(r) for r in data])
+    job = blob.upload_from_string(converted_data)
+    return(job)
+
+def blob_to_table(file_path,table_id):
+    '''
+        Loads data from blob storage at the given file_path into the table_id 
+    '''
+    print("Pushing file {} to {}".format(file_path,table_id))
+    # pull table specific config 
+    table_config = config.bigquery_load_table_parameters.get(table_id,{})
+    # get table 
+    table_ref = dataset.table(table_id)
+    # start jon config 
+    job_config = bigquery.LoadJobConfig()
+    job_config.write_disposition = bigquery.WriteDisposition.WRITE_APPEND
+    job_config.source_format = bigquery.SourceFormat.NEWLINE_DELIMITED_JSON
+    job_config.autodetect = table_config.get('autodetect',True)
+    job_config.max_bad_records = 10000
+    job_config.schema_update_options = [
+        bigquery.SchemaUpdateOption.ALLOW_FIELD_ADDITION
+    ]
+    uri = "gs://{}/{}".format(config.gcp_bucket_landing,file_path)
+    # start job
+    load_job = bigquery_client.load_table_from_uri(
+        uri, table_ref, job_config=job_config
+    )  # API request
+    print("Starting job {}".format(load_job.job_id))
+    # get results 
+    load_job.result()  # Waits for table load to complete.
+    print("Job finished.")
+
+    destination_table = bigquery_client.get_table(table_ref)
+    print("Loaded {} rows.".format(destination_table.num_rows))
+    return(load_job)
+
+
+def reprocess_blob_data():
+    blobs = gcp_bucket_landing.list_blobs()
+
+    for blob in blobs:
+        blob.name
+        data = get_blob_data(blob.name)
+        for d in data:
+            util.remove_empty_lists(d)
+        push_data_blob(data,blob.name)
+
+def reload_landing_data(start_file = ''):
+    blobs = gcp_bucket_landing.list_blobs()
+
+    for blob in blobs:
+        if(blob.name < start_file):
+            continue
+        file_path = blob.name
+        table_id = '_'.join(file_path.split('/')[:-1])
+        blob_to_table(file_path,table_id)
 
 def load_json_data(data,directory,file_prefix):
     '''
@@ -91,14 +144,13 @@ def load_json_data(data,directory,file_prefix):
     file_name = '_'.join([file_prefix,str(uuid.uuid1())])
     # get full path
     file_path = '/'.join([directory,file_name])
-    print("Pushing data to %s" % file_path)
-    blob = gcp_bucket_landing.blob(file_path)
-    # convert data to newline delimited json
-    converted_data = "\n".join([json.dumps(r) for r in data])
-    job = blob.upload_from_string(converted_data)
     # push to cloud storage
+    job = push_data_blob(data,file_path)
+    # push to table 
+    table_id = '_'.join(file_path.split('/')[:-1])
+    load_job = blob_to_table(file_path,table_id)
     #job = bigquery_client.load_table_from_json(converted_data, bq_table, job_config = job_config)
-    return(job)
+    return(load_job)
 
 
 

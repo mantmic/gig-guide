@@ -25,7 +25,7 @@ from
     using ( spotify_artist_id )
 )
 select
-    to_hex ( {{ dbt_utils.surrogate_key('artist_music_source','artist_music_url' ) }} ) as artist_music_id
+    to_hex ( {{ dbt_utils.surrogate_key('artist_id','artist_music_source','artist_music_url' ) }} ) as artist_music_id
   , artist_id
   , artist_music_source
   , artist_music_url
