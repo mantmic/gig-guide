@@ -10,6 +10,20 @@ def flatten(l):
         else:
             yield el
 
+def remove_empty_lists(d):
+    '''
+        Removes all empty lists from an input dictionary 
+        Args:
+            d (dict): Input dictionary to process 
+        Returns: dict 
+    '''
+    d_copy = d.copy()
+    for k, v in d_copy.items():
+        if isinstance(v, dict):
+            remove_empty_lists(d[k])
+        elif v == []:
+            d.pop(k)
+
 def get_lookup(input_data,lookup_field):
     # pull the field from the list of dictionaries 
     lookup = [i.get(lookup_field) for i in input_data]

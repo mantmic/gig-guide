@@ -9,3 +9,9 @@ extract_days = int(os.getenv('GIG_EXTRACT_DAYS', 1))
 
 # variable to offset the extract start day by X number days. Can be used to only extract gigs from X days into the future
 extract_start_date_offset = int(os.getenv('EXTRACT_START_DATE_OFFSET', 0))
+
+bigquery_load_table_parameters = {
+    "spotify_artist_top_tracks":{
+        "autodetect":False 
+    }
+}

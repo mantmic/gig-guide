@@ -9,7 +9,7 @@ with dup_data as
   , {{ clean_url('website') }}                                                        as artist_website
   , track_ids                                                                         as unearthed_track_ids
   , socials                                                                           as social_links
-  , row_number() over ( partition by unearthed_artist_url order by _FILE_NAME desc )  as dup_rn
+  , row_number() over ( partition by unearthed_artist_url order by extract_ts desc )  as dup_rn
 from
   {{ source('unearthed', 'unearthed_artist_details') }}
 where

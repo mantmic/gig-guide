@@ -7,7 +7,7 @@ with dup_data as
   , search_result_type                                                                      as unearthed_search_result_type
   , unearthed_artist_url  
   , search_result_order                                                                     as unearthed_search_result_order
-  , rank() over ( partition by search_artist_name order by _FILE_NAME desc ) as dup_rn
+  , rank() over ( partition by search_artist_name order by extract_ts desc ) as dup_rn
 from
   {{ source('unearthed', 'unearthed_artist_search') }}
 )

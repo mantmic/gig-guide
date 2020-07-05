@@ -11,7 +11,7 @@ with dup_data as
   , music_platform_links
   , bio_link_url 
   , social_media_links
-  , row_number() over ( partition by input_query order by _file_name desc ) as dup_rn
+  , row_number() over ( partition by input_query order by extract_ts desc ) as dup_rn
 from 
   {{ source('google', 'google_search') }}
 )
