@@ -3,10 +3,13 @@ import lib.util     as util
 import datetime
 import os
 import time
+
+import config 
+
 from prefect import task
 
 # extract these many days
-extract_days = int(os.getenv('GIG_EXTRACT_DAYS', 1))
+extract_days = config.extract_days
 
 # extract each of these cities
 cities = ['sydney','melbourne']
