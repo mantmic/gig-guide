@@ -5,7 +5,7 @@ with transform as
      {{ dbt_utils.surrogate_key( lat, lon ) }}  as location_id
    , ST_GEOGPOINT ( {{ lon }}, {{ lat }} )      as location_geography
 from
-  test.venue
+  {{ model }}
 ),
 validation as
 ( select

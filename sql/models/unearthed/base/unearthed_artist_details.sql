@@ -6,7 +6,7 @@ with dup_data as
   , unearthed_artist_url
   , trim ( artist_name )                                                              as unearthed_artist_name
   , location                                                                          as artist_location
-  , website                                                                           as artist_website
+  , {{ clean_url('website') }}                                                        as artist_website
   , track_ids                                                                         as unearthed_track_ids
   , socials                                                                           as social_links
   , row_number() over ( partition by unearthed_artist_url order by _FILE_NAME desc )  as dup_rn

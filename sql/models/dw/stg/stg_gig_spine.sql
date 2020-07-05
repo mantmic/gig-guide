@@ -19,7 +19,7 @@ bandcamp as
   , bandcamp.gig_date
   , bandcamp_venue.venue_id
 from
-  {{ ref('bandcamp_gig') }} bandcamp
+  {{ ref('bandcamp_gig_final') }} bandcamp
   join
   {{ ref('stg_venue_spine') }} bandcamp_venue
     using ( bandcamp_venue_id )

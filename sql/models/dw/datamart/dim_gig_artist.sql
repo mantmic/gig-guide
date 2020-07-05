@@ -17,7 +17,9 @@ select
     gig_spine.gig_id
   , artist_spine.artist_id
 from
-  {{ ref('bandcamp_gig') }} bandcamp
+  {{ ref('bandcamp_gig_final') }} bandcamp
+  cross join
+  unnest ( bandcamp.bandcamp_artists ) bandcamp_artist_id 
   join
   {{ ref('stg_gig_spine') }} gig_spine
     using ( bandcamp_gig_id )
