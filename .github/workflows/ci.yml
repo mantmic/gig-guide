@@ -10,6 +10,7 @@ on:
 
 env:
   GOOGLE_APPLICATION_CREDENTIALS: "/tmp/google-account.json"
+  CHROMEDRIVER_PATH: "/tmp/chromedriver"
   GCP_PROJECT_ID: "melbourne-gig-guide"
   GCP_LOCATION: "australia-southeast1"
   SPOTIPY_CLIENT_ID: ${{ secrets.SPOTIPY_CLIENT_ID }}
@@ -28,10 +29,18 @@ jobs:
         sudo echo "$GCP_SERVICE_ACCOUNT_JSON" > $GOOGLE_APPLICATION_CREDENTIALS
       env: # Or as an environment variablez
         GCP_SERVICE_ACCOUNT_JSON: ${{ secrets.GCP_SERVICE_ACCOUNT_JSON }}
+    
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
         python-version: ${{ matrix.python-version }}
+    
+    - name: Setup chrome 
+      working-directory: bin/chrome
+      run: |
+        sudo apt install ./google-chrome-stable_current_amd64.deb
+        cp ./chromedriver $CHROMEDRIVER_PATH
+    
     - name: Install python modules
       working-directory: python
       run: |
