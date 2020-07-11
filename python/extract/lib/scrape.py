@@ -3,19 +3,40 @@ from bs4 import BeautifulSoup
 import time
 import os
 
+
+
+from selenium import webdriver 
+from selenium.webdriver.common.by import By 
+from selenium.webdriver.support.ui import WebDriverWait 
+from selenium.webdriver.support import expected_conditions as EC 
+from selenium.common.exceptions import TimeoutException
+
 retry_max_count = int(os.getenv('REQUEST_RETRY_COUNT', 3))
 retry_sleep_time = int(os.getenv('REQUEST_FAILURE_SLEEP_TIME', 35))
+chromedriver_path = os.getenv('CHROMEDRIVER_PATH')
+
+# setup selenium
+selenium_option = webdriver.ChromeOptions()
+selenium_option.add_argument(" — incognito")
+selenium_option.add_argument('--headless')
 
 
-def get_soup(url, headers = {}):
+
+def get_soup(url, headers = {}, use_selenium=False):
     retry_count = 0
     print("Scraping url %s" % url)
     success = False
     res = None
     while success == False and retry_count < retry_max_count:
         try:
-            res = requests.get(url,headers=headers)
-            res = BeautifulSoup(res.text,'html.parser')
+            if(use_selenium):
+                selenium_browser = webdriver.Chrome(executable_path=chromedriver_path, options=selenium_option)
+                selenium_browser.get(url)
+                html_source = selenium_browser.find_element_by_tag_name('html').get_attribute('innerHTML')
+                res = BeautifulSoup(html_source,'html.parser')
+            else:
+                res = requests.get(url,headers=headers)
+                res = BeautifulSoup(res.text,'html.parser')
             success = True
         except:
             if (retry_count < retry_max_count):
@@ -26,4 +47,5 @@ def get_soup(url, headers = {}):
             else:
                 print("Failed to scrape url %s" % url)
                 return
+    
     return(res)

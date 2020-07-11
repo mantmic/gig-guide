@@ -91,7 +91,11 @@ def blob_to_table(file_path,table_id):
     job_config = bigquery.LoadJobConfig()
     job_config.write_disposition = bigquery.WriteDisposition.WRITE_APPEND
     job_config.source_format = bigquery.SourceFormat.NEWLINE_DELIMITED_JSON
-    job_config.autodetect = table_config.get('autodetect',True)
+    # if there is a schema specified for the table, use it
+    if(table_config.get('schema')):
+        job_config.schema = table_config.get('schema')
+    else:
+        job_config.autodetect = table_config.get('autodetect',True)
     job_config.max_bad_records = 10000
     job_config.schema_update_options = [
         bigquery.SchemaUpdateOption.ALLOW_FIELD_ADDITION

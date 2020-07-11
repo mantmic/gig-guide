@@ -3,7 +3,7 @@
 select
     moshtix_url
   , gig_datetime
-  , min ( ticket_types.ticket_price ) as ticket_price
+  , safe_cast ( replace ( min ( ticket_types.ticket_price ), '$', '' ) as numeric ) as ticket_price
 from
   {{ ref('moshtix_gig_details') }} gig_details
   cross join

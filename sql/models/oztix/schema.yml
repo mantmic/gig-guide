@@ -1,0 +1,42 @@
+version: 2
+
+sources:
+  - name: oztix
+    schema: "{{ env_var('LANDING_DATASET_ID', 'landing_dev') }}"
+    tables:
+      - name: oztix_gig_details
+
+models:
+  - name: oztix_gig_details
+    description: Table event details from oztix ticket pages
+    columns:
+      - name: oztix_gig_details_sk
+        tests:
+          - unique
+          - not_null
+  - name: oztix_venue
+    description: Table containing all venues scraped from oztix
+    columns:
+      - name: oztix_venue_id
+        tests:
+          - unique
+          - not_null
+  - name: oztix_gig
+    description: Consolodated table of gigs from oztix
+    columns:
+      - name: oztix_gig_id
+        tests:
+          - unique
+          - not_null
+      - name: oztix_ticket_url
+        tests:
+          - unique
+          - not_null
+      - name: oztix_venue_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('oztix_venue')
+              field: oztix_venue_id
+
+tags: "oztix"

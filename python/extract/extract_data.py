@@ -11,6 +11,7 @@ import tasks.get_datamelbourne    as get_datamelbourne
 import tasks.get_thebrag          as get_thebrag
 import tasks.get_geocode          as get_geocode
 import tasks.get_moshtix          as get_moshtix
+import tasks.get_oztix            as get_oztix
 import tasks.get_bandcamp         as get_bandcamp
 import tasks.get_unearthed        as get_unearthed
 import tasks.get_spotify          as get_spotify 
@@ -93,8 +94,15 @@ def main():
         load_json_data(thebrag_geocoded_addresses,'results','geocode')
         
         # get additional gig details from links
+        # moshtix
         thebrag_moshtix_gig_details = get_moshtix.extract_gig_details(thebrag_gig_details,'gig_ticket_url')
         load_json_data(thebrag_moshtix_gig_details,'gig_details','moshtix')
+        # oztix
+        thebrag_oztix_gig_details = get_oztix.extract_gig_details(thebrag_gig_details,'gig_ticket_url')
+        load_json_data(thebrag_oztix_gig_details,'gig_details','oztix')
+        # geocode oztix locations 
+        thebrag_oztix_geocoded_addresses = get_geocode.extract_geocode(thebrag_oztix_gig_details,'event_location')
+        load_json_data(thebrag_oztix_geocoded_addresses,'results','geocode')
 
     state = flow.run()
     #flow.run(executor=DaskExecutor())
