@@ -15,6 +15,7 @@ from
   {{ ref('dim_gig') }} gig
     using ( venue_id ) 
 where
-  gig.gig_date between current_date ( 'Australia/Sydney' ) and date_add ( current_date ( 'Australia/Sydney' ), interval 7 day )
+  gig.gig_date between date_trunc ( current_date ( 'Australia/Sydney' ), week (SUNDAY) ) and date_add ( date_trunc ( current_date ( 'Australia/Sydney' ), week (SUNDAY) ), interval 7 day )
+  and gig.gig_cancelled_yn != 'Y'
 order by
   gig.gig_date

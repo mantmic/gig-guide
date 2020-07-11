@@ -6,3 +6,4 @@ geocoder
 pandas
 python-Levenshtein
 spotipy
+selenium
