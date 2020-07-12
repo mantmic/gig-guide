@@ -11,7 +11,7 @@ def extract_google_search(query):
     USER_AGENT = "Mozilla/5.0 (X11; Linux i686; rv:77.0) Gecko/20100101 Firefox/77.0"
     headers = {"user-agent" : USER_AGENT}
 
-    soup = scrape.get_soup(url,headers)
+    soup = scrape.get_soup(url,headers,use_selenium=True)
 
     sidebar_section = soup.find('h1',text='Complementary results').findNext('div')
     # get artist name     
