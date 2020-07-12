@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: reverbnation
+    schema: "{{ env_var('LANDING_DATASET_ID', 'landing_dev') }}"
+    tables:
+      - name: reverbnation_venue_shows
+
+
+tags: "reverbnation"
