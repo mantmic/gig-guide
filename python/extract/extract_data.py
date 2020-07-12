@@ -6,7 +6,7 @@ import flows.reverbnation   as reverbnation
 
 
 def main():
-    if(False):
+    if(True):
         thebrag_state = thebrag.flow.run()
         assert thebrag_state.is_successful()
 
