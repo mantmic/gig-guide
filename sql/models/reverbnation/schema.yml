@@ -6,5 +6,27 @@ sources:
     tables:
       - name: reverbnation_venue_shows
 
+models:
+  - name: reverbnation_venue
+    description: Table containing reverbnation venue details
+    columns:
+      - name: reverbnation_venue_id
+        tests:
+          - unique
+          - not_null
+  - name: reverbnation_gig
+    description: Table containing reverbnation gig details
+    columns:
+      - name: reverbnation_gig_id
+        tests:
+          - unique
+          - not_null
+  - name: reverbnation_artist
+    description: Table containing reverbnation artist details
+    columns:
+      - name: reverbnation_artist_id
+        tests:
+          - unique
+          - not_null
 
 tags: "reverbnation"

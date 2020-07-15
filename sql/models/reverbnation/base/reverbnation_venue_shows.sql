@@ -8,6 +8,7 @@ select
   , venue_image_url 
   , venue_social_links
   , shows
+  , extract_ts
   , row_number() over ( partition by venue_reverbnation_url order by extract_ts desc ) as dup_rn 
 from  
   {{ source('reverbnation', 'reverbnation_venue_shows') }}

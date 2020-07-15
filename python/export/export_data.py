@@ -5,9 +5,7 @@ dataset_id = os.getenv('BIGQUERY_DATASET_ID', "dev")
 
 # list of tables to export
 table_export_list = [
-    {"table_id":"venue","file_name":"venue"},
-    {"table_id":"artist","file_name":"artist"},
-    {"table_id":"gig","file_name":"gig"}
+    {"table_id":"region_gig","file_name":"region_gig"}
 ]
 
 for table in table_export_list:
