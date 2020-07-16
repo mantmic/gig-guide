@@ -34,5 +34,18 @@ bigquery_load_table_parameters = {
             bigquery.SchemaField('event_datetime', 'STRING', 'NULLABLE', None, ()), 
             bigquery.SchemaField('oztix_ticket_url', 'STRING', 'NULLABLE', None, ())
         ]
+    },
+    'moshtix_gig_details':{
+        "autodetect":False,
+        "schema":[
+            bigquery.SchemaField('ticket_types', 'RECORD', 'REPEATED', None, (
+                bigquery.SchemaField('ticket_price', 'STRING', 'NULLABLE', None, ()), 
+                bigquery.SchemaField('ticket_type_name', 'STRING', 'NULLABLE', None, ()))
+            ), 
+            bigquery.SchemaField('gig_venue_name', 'STRING', 'NULLABLE', None, ()), 
+            bigquery.SchemaField('gig_datetime', 'STRING', 'NULLABLE', None, ()), 
+            bigquery.SchemaField('extract_ts', 'TIMESTAMP', 'NULLABLE', 'bq-datetime', ()), 
+            bigquery.SchemaField('url', 'STRING', 'NULLABLE', None, ())
+        ]
     }
 }

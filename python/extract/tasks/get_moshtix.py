@@ -12,7 +12,7 @@ def extract_gig_details(input_data,gig_url_field):
     for url in gig_urls:
         # validate that url is a moshtix url, then scrape
         parsed_url = urlparse(url)
-        if(parsed_url.netloc == 'www.moshtix.com.au'):
+        if(parsed_url.netloc in ['www.moshtix.com.au','www.whatslively.com']):
             try:
                 results.append(moshtix.get_gig_details(url))
             except:

@@ -20,7 +20,20 @@ selenium_option = webdriver.ChromeOptions()
 selenium_option.add_argument(" — incognito")
 selenium_option.add_argument('--headless')
 
+class InteractiveScrapeSession:
+    '''
+        Works on MacOS
+    '''
+    def __init__(self, url):
+        options = webdriver.ChromeOptions()
+        #options.add_argument("user-data-dir=/Users/{}/Library/Application\ Support/Google/Chrome/Default".format(os.getenv('USER')));
+        self._selenium_browser = webdriver.Chrome(executable_path=chromedriver_path, options=options)
+        self._selenium_browser.get(url)
 
+    def get_soup(self):
+        html_source = self._selenium_browser.find_element_by_tag_name('html').get_attribute('innerHTML')
+        res = BeautifulSoup(html_source,'html.parser')
+        return(res)
 
 def get_soup(url, headers = {}, use_selenium=False):
     retry_count = 0

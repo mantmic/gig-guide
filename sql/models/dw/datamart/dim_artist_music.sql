@@ -29,5 +29,6 @@ select
   , artist_id
   , artist_music_source
   , artist_music_url
+  , row_number() over ( partition by artist_id order by case when artist_music_source = 'spotify' then 1 when artist_music_source = 'bandcamp' then 2 else 3 end ) as artist_music_rank 
 from
   tracks_combined
