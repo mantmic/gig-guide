@@ -37,11 +37,11 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
     
-    - name: Setup chrome 
-      working-directory: bin/chrome
-      run: |
-        sudo apt install ./google-chrome-stable_current_amd64.deb
-        cp ./chromedriver $CHROMEDRIVER_PATH
+    # - name: Setup chrome 
+    #   working-directory: bin/chrome
+    #   run: |
+    #     sudo apt install ./google-chrome-stable_current_amd64.deb
+    #     cp ./chromedriver $CHROMEDRIVER_PATH
     
     - name: Install python modules
       working-directory: python
